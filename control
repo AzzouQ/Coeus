@@ -1,0 +1,9 @@
+Package: com.azzou.plato
+Name: Plato
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome Control Center module!
+Maintainer: Azzou
+Author: Azzou
+Section: Control Center (Modules)
+Depends: mobilesubstrate, firmware (>= 13), ws.hbang.common (>= 1.14), libactivator (>= 1.9.13), com.a3tweaks.flipswitch (>= 1.0.16), com.opa334.ccsupport
