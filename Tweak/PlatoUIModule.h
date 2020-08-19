@@ -8,8 +8,6 @@ typedef struct {
 	unsigned long long height;
 } CCUILayoutSize;
 
-HBPreferences *prefs;
-
 @interface PlatoUIModule : NSObject <CCUIContentModule>
 
 @property(readonly, nonatomic) PlatoUIModuleContentViewController *contentViewController;

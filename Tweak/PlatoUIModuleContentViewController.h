@@ -1,12 +1,11 @@
 #import <Cephei/HBPreferences.h>
 #import <ControlCenterUIKit/CCUIContentModuleContentViewController.h>
+#import "SharedHeader.h"
 
 #import "PlatoUILabeledRoundButtonViewController.h"
 
 #define IS_NEW_PAGE(index, togglePerPage) (!(index % togglePerPage))
 #define IS_NEW_ROW(index, columnNumber) (!(index % columnNumber))
-
-HBPreferences *prefs;
 
 @interface PlatoUIModuleContentViewController : UIViewController <CCUIContentModuleContentViewController>
 

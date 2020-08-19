@@ -29,8 +29,6 @@ static const int pageTotalExpanded = (toggleTotal / toggleExpanded) + ((isLastPa
 
 	if ((self = [super initWithNibName:name bundle:bundle])) {
 
-		// prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.platoprefs"];
-
 		self.view.autoresizesSubviews = YES;
 
 		[self initValues];
@@ -42,13 +40,6 @@ static const int pageTotalExpanded = (toggleTotal / toggleExpanded) + ((isLastPa
 }
 
 - (void)initValues {
-
-	NSInteger columnCollapsed = 5;
-	NSInteger rowCollapsed = 1;
-
-	[prefs registerInteger:&columnCollapsed default:5 forKey:@"columnCollapsed"];
-	[prefs registerInteger:&rowCollapsed default:1 forKey:@"rowCollapsed"];
-
 	self.columnCollapsed = columnCollapsed;
 	self.rowCollapsed = rowCollapsed;
 	self.toggleCollapsed = self.columnCollapsed * self.rowCollapsed;
