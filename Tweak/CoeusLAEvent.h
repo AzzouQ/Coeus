@@ -1,6 +1,6 @@
 #import <libactivator/libactivator.h>
 
-@interface PlatoLAEvent : NSObject <LAEventDataSource>
+@interface CoeusLAEvent : NSObject <LAEventDataSource>
 
 @property (nonatomic, assign) NSString *eventIdentifier;
 

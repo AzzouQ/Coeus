@@ -1,12 +1,14 @@
-#import "PlatoUILabeledRoundButtonViewController.h"
+#import "CoeusUILabeledRoundButtonViewController.h"
 
-@implementation PlatoUILabeledRoundButtonViewController
+@implementation CoeusUILabeledRoundButtonViewController
 
 - (instancetype)initWithEventIdentifier:(NSString *)eventIdentifier {
 
 	if ((self = [super initWithGlyphImage:[UIImage imageNamed:@"Power" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
+
 		self.eventIdentifier = eventIdentifier;
-		self.event = [[PlatoLAEvent alloc] initWithEventIdentifier:eventIdentifier];
+		self.event = [[CoeusLAEvent alloc] initWithEventIdentifier:eventIdentifier];
+
 		return self;
 	}
 

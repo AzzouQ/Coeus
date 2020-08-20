@@ -2,13 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
 	<key>title</key>
-	<string>Plato</string>
-
+	<string>Coeus</string>
 	<key>items</key>
 	<array>
-
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
@@ -20,12 +17,10 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
-			<key>default</key>
-			<real>4</real>
-			<key>defaults</key>
-			<string>com.azzou.platoprefs</string>
 			<key>key</key>
 			<string>moduleWidth</string>
+			<key>default</key>
+			<real>4</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -34,18 +29,16 @@
 			<false/>
 			<key>isSegmented</key>
 			<true/>
-			<key>PostNotification</key>
-			<string>com.azzou.platoprefs/ReloadPrefs</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
-			<key>default</key>
-			<real>1</real>
-			<key>defaults</key>
-			<string>com.azzou.platoprefs</string>
 			<key>key</key>
 			<string>moduleHeight</string>
+			<key>default</key>
+			<real>1</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -54,27 +47,39 @@
 			<false/>
 			<key>isSegmented</key>
 			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Dark slider indicator</string>
+			<key>key</key>
+			<string>isIndicatorDark</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
-			<string>com.azzou.platoprefs/ReloadPrefs</string>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
 		</dict>
 
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Toggles Layout</string>
+			<string>Collapsed Layout</string>
 			<key>footerText</key>
 			<string>1st slider define the number of columns, 2nd define the number of rows</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
-			<key>default</key>
-			<real>5</real>
-			<key>defaults</key>
-			<string>com.azzou.platoprefs</string>
 			<key>key</key>
 			<string>columnCollapsed</string>
+			<key>default</key>
+			<real>5</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -83,18 +88,18 @@
 			<false/>
 			<key>isSegmented</key>
 			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
-			<string>com.azzou.platoprefs/ReloadPrefs</string>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
-			<key>default</key>
-			<real>1</real>
-			<key>defaults</key>
-			<string>com.azzou.platoprefs</string>
 			<key>key</key>
 			<string>rowCollapsed</string>
+			<key>default</key>
+			<real>1</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -103,8 +108,129 @@
 			<false/>
 			<key>isSegmented</key>
 			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
-			<string>com.azzou.platoprefs/ReloadPrefs</string>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Paging</string>
+			<key>key</key>
+			<string>isPagingCollapsed</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Show slide indicator</string>
+			<key>key</key>
+			<string>isIndicatorCollapsed</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Expanded Layout</string>
+			<key>footerText</key>
+			<string>1st slider define the number of columns, 2nd define the number of rows</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>key</key>
+			<string>columnExpanded</string>
+			<key>default</key>
+			<real>2</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>4</real>
+			<key>showValue</key>
+			<false/>
+			<key>isSegmented</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>key</key>
+			<string>rowExpanded</string>
+			<key>default</key>
+			<real>3</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>5</real>
+			<key>showValue</key>
+			<false/>
+			<key>isSegmented</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Paging</string>
+			<key>key</key>
+			<string>isPagingExpanded</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Show slide indicator</string>
+			<key>key</key>
+			<string>isIndicatorExpanded</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Show labels</string>
+			<key>key</key>
+			<string>isLabelsExpanded</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
 		</dict>
 
 		<dict>
@@ -127,7 +253,7 @@
 			<key>label</key>
 			<string>Reset Preferences</string>
 			<key>action</key>
-			<string>resetPrompt</string>
+			<string>reset</string>
 		</dict>
 
 		<dict>
@@ -142,8 +268,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@Litteeen</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -154,8 +278,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@74k1_</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -166,8 +288,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@opa334dev</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -178,8 +298,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@Muirey03</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -190,8 +308,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@hamzasood</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -209,8 +325,6 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 		<dict>
             <key>cell</key>
             <string>PSButtonCell</string>
-            <key>label</key>
-            <string>@A3Tweaks</string>
             <key>cellClass</key>
             <string>HBTwitterCell</string>
             <key>label</key>
@@ -233,9 +347,8 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 			<key>subtitle</key>
 			<string>GitHub</string>
 			<key>url</key>
-			<string>https://github.com/AzzouDuGhetto/Plato</string>
+			<string>https://github.com/AzzouDuGhetto/Coeus</string>
 		</dict>
-
 	</array>
 </dict>
 </plist>

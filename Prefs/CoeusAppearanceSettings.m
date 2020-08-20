@@ -1,6 +1,6 @@
-#import "PLTRootListController.h"
+#import "CoeusRootListController.h"
 
-@implementation PLTAppearanceSettings
+@implementation CoeusAppearanceSettings
 
 - (UIColor *)navigationBarTitleColor {
     return [UIColor colorWithRed:0.96 green:0.77 blue:0.75 alpha:1.0];

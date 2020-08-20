@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>Plato</string>
+	<string>Coeus</string>
 	<key>CFBundleExecutable</key>
-	<string>Plato</string>
+	<string>Coeus</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.azzou.plato</string>
+	<string>com.azzou.coeus</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -26,7 +26,7 @@
 		<integer>2</integer>
 	</array>
 	<key>NSPrincipalClass</key>
-	<string>Plato</string>
+	<string>Coeus</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>iPhoneOS</string>

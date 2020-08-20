@@ -5,24 +5,19 @@
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
 
-@interface PLTAppearanceSettings : HBAppearanceSettings
+@interface CoeusAppearanceSettings : HBAppearanceSettings
 @end
 
-@interface PLTRootListController : HBRootListController {
+@interface CoeusRootListController : HBRootListController {
     UITableView *_table;
 }
 
-@property (nonatomic, retain) UISwitch *enableSwitch;
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UIImageView *headerImageView;
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UIImageView *iconView;
 
-- (void)toggleState;
-- (void)setEnableSwitchState;
-- (void)resetPrompt;
-- (void)resetPreferences;
+- (void)reset;
 - (void)respring;
-- (void)respringUtil;
 
 @end

@@ -5,17 +5,17 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>PLTPrefs</string>
+		<string>CoeusPrefs</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>PLTRootListController</string>
+		<string>CoeusRootListController</string>
 		<key>icon</key>
 		<string>icon.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>Plato</string>
+		<string>Coeus</string>
 	</dict>
 </dict>
 </plist>

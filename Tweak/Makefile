@@ -5,12 +5,12 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
 
-SOURCE	=	PlatoUIModule.m								\
-			PlatoUIModuleContentViewController.m		\
-			PlatoUILabeledRoundButtonViewController.m	\
-			PlatoLAEvent.m								\
+SOURCE	=	CoeusUIContentModule.m						\
+			CoeusUIModuleContentViewController.m		\
+			CoeusUILabeledRoundButtonViewController.m	\
+			CoeusLAEvent.m								\
 
-BUNDLE_NAME = Plato
+BUNDLE_NAME = Coeus
 $(BUNDLE_NAME)_BUNDLE_EXTENSION = bundle
 $(BUNDLE_NAME)_FILES = $(SOURCE)
 $(BUNDLE_NAME)_LIBRARIES += activator flipswitch

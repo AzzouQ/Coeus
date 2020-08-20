@@ -1,16 +1,16 @@
 #import <Cephei/HBPreferences.h>
 #import <ControlCenterUIKit/ControlCenterUIKit.h>
 
-#import "PlatoUIModuleContentViewController.h"
+#import "CoeusUIModuleContentViewController.h"
 
 typedef struct {
 	unsigned long long width;
 	unsigned long long height;
 } CCUILayoutSize;
 
-@interface PlatoUIModule : NSObject <CCUIContentModule>
+@interface CoeusUIModule : NSObject <CCUIContentModule>
 
-@property(readonly, nonatomic) PlatoUIModuleContentViewController *contentViewController;
+@property(readonly, nonatomic) CoeusUIModuleContentViewController *contentViewController;
 @property(readonly, nonatomic) UIViewController *backgroundViewController;
 
 @end

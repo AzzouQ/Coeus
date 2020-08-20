@@ -2,11 +2,11 @@
 #import <ControlCenterUIKit/CCUILabeledRoundButton.h>
 #import <ControlCenterUIKit/CCUILabeledRoundButtonViewController.h>
 
-#import "PlatoLAEvent.h"
+#import "CoeusLAEvent.h"
 
-@interface PlatoUILabeledRoundButtonViewController : CCUILabeledRoundButtonViewController
+@interface CoeusUILabeledRoundButtonViewController : CCUILabeledRoundButtonViewController
 
-@property (nonatomic, retain) PlatoLAEvent *event;
+@property (nonatomic, retain) CoeusLAEvent *event;
 @property (nonatomic, assign) NSString *eventIdentifier;
 
 - (id)initWithEventIdentifier:(NSString *)eventIdentifier;

@@ -1,6 +1,6 @@
-#import "PlatoLAEvent.h"
+#import "CoeusLAEvent.h"
 
-@implementation PlatoLAEvent
+@implementation CoeusLAEvent
 
 - (instancetype)initWithEventIdentifier:(NSString *)eventIdentifier {
         if ((self = [super init])) {
@@ -16,7 +16,7 @@
 }
 
 - (NSString *)localizedGroupForEventName:(NSString *)eventName {
-        return @"Plato";
+        return @"Coeus";
 }
 
 - (NSString *)localizedTitleForEventName:(NSString *)eventName {
