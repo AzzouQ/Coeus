@@ -9,15 +9,16 @@
 @property (nonatomic, readonly) BOOL providesOwnPlatter;
 
 @property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, assign) CGSize toggleSize;
+// @property (nonatomic, assign) CGSize originalToggleSize;
 @property (nonatomic, assign) BOOL isExpanded;
 
+@property (nonatomic, assign) CGSize toggleSize;
+@property (nonatomic, assign) BOOL isPaging;
+@property (nonatomic, assign) BOOL isLabels;
+@property (nonatomic, assign) NSInteger column;
+@property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger togglePage;
-
 @property (nonatomic, assign) CGFloat spaceWidth;
 @property (nonatomic, assign) CGFloat spaceHeight;
-
-@property (nonatomic, assign) NSInteger toggleExpanded;
-@property (nonatomic, assign) NSInteger pageExpanded;
 
 @end

@@ -8,12 +8,13 @@
 #define GET_SPACE_HEIGHT(heightTotal, toggleRow, toggleHeight) ((heightTotal - (toggleRow * toggleHeight)) / (toggleRow + 1))
 
 #define GET_PAGE_TOTAL(toggleTotal, togglePage) (toggleTotal / togglePage) + ((toggleTotal % togglePage) ? 1 : 0)
-#define GET_TOGGLE_ROW_TOTAL(toggleTotal, toggleRowTotal) (toggleTotal / toggleRowTotal) + ((toggleTotal % toggleRowTotal) ? 1 : 0)
+#define GET_COLUMN_TOTAL(toggleTotal, togglePage, toggleColumn) ((toggleTotal / togglePage) * toggleColumn) + ((toggleTotal % togglePage) > toggleColumn ? toggleColumn : toggleTotal % togglePage)
+#define GET_ROW_TOTAL(toggleTotal, togglePage, toggleRow) ((toggleTotal / togglePage) * toggleRow) + (((toggleTotal % togglePage) / toggleRow) + 1)
 
 #define SCROLL_TO_PAGE_HORIZONTAL(scrollViewBounds, scrollToPage) (CGRect){{ scrollViewBounds.size.width * scrollToPage, scrollViewBounds.origin.y }, scrollViewBounds.size }
 #define SCROLL_TO_PAGE_VERTICAL(scrollViewBounds, scrollToPage) (CGRect){{ scrollViewBounds.origin.x, scrollViewBounds.size.width * scrollToPage }, scrollViewBounds.size }
 
-static const int toggleTotal = 25;
+static const int toggleTotal = 20;
 
 static const int scrollToPageCollapsed = 0;
 static const int scrollToPageExtanded = 0;
@@ -42,12 +43,14 @@ static const int scrollToPageExtanded = 0;
 	[prefs registerInteger:&rowCollapsed default:1 forKey:@"rowCollapsed"];
 	[prefs registerBool:&isIndicatorCollapsed default:NO forKey:@"isIndicatorCollapsed"];
 	[prefs registerBool:&isPagingCollapsed default:YES forKey:@"isPagingCollapsed"];
+	[prefs registerBool:&isLabelsCollapsed default:NO forKey:@"isLabelsCollapsed"];
 
 	[prefs registerInteger:&columnExpanded default:2 forKey:@"columnExpanded"];
 	[prefs registerInteger:&rowExpanded default:3 forKey:@"rowExpanded"];
 	[prefs registerBool:&isIndicatorExpanded default:YES forKey:@"isIndicatorExpanded"];
 	[prefs registerBool:&isPagingExpanded default:YES forKey:@"isPagingExpanded"];
 	[prefs registerBool:&isLabelsExpanded default:YES forKey:@"isLabelsExpanded"];
+	[prefs registerBool:&isScrollVertical default:NO forKey:@"isScrollVertical"];
 }
 
 - (void)initScrollView {
@@ -71,7 +74,7 @@ static const int scrollToPageExtanded = 0;
 		[toggle.view.layer setFrame:(CGRect){ {0, 0}, [toggle.view sizeThatFits:self.view.bounds.size] }];
 
 		toggle.title = [NSString stringWithFormat:@"Title %d", (i + 1)];
-		toggle.subtitle = @"Subtitle";
+		toggle.subtitle = @"Subtitleeeeeeeeeeeeee";
 		toggle.useAlternateBackground = NO;
 		toggle.labelsVisible = YES;
 
@@ -100,92 +103,112 @@ static const int scrollToPageExtanded = 0;
 
 - (void)layoutCollapsed {
 
-	self.togglePage = columnCollapsed * rowCollapsed;
-	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, columnCollapsed, self.toggleSize.width);
-	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, rowCollapsed, self.toggleSize.height);
+	self.isPaging = isPagingCollapsed;
+	self.isLabels = isLabelsCollapsed;
+	self.column = columnCollapsed;
+	self.row = rowCollapsed;
+	self.togglePage = self.column * self.row;
+	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, self.column, self.toggleSize.width);
+	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
+
+	[self layoutScrollView];
+	[self layoutScrollViewCollapsed];
+
+	[self layoutHorizontal];
+}
+
+- (void)layoutExpanded {
+
+	self.isPaging = isPagingExpanded;
+	self.isLabels = isLabelsExpanded;
+	self.column = columnExpanded;
+	self.row = rowExpanded;
+	self.togglePage = self.column * self.row;
+	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, self.column, self.toggleSize.width);
+	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
+
+	[self layoutScrollView];
+	[self layoutScrollViewExtanded];
+
+	(isScrollVertical) ? [self layoutVertical] : [self layoutHorizontal];
+}
+
+- (void)layoutHorizontal {
 
 	CCUILabeledRoundButton *toggle = nil;
 	CGPoint togglePosition = { self.spaceWidth, self.spaceHeight };
 
 	int pageIndex = 0;
 
-	[self layoutScrollViewCollapsed];
+	for (int i = 0; i < toggleTotal; i++) {
+		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
+
+		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
+			pageIndex++;
+			togglePosition.x = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) : togglePosition.x + self.toggleSize.width) + self.spaceWidth;
+			togglePosition.y = self.spaceHeight;
+		} else if ((i) && IS_NEW_ROW(i, self.column)) {
+			togglePosition.x = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x - ((self.column - 1) * (self.toggleSize.width + self.spaceWidth)));
+			togglePosition.y += self.toggleSize.height + self.spaceHeight;
+		} else if (i) {
+			togglePosition.x += self.toggleSize.width + self.spaceWidth;
+		}
+
+		toggle.labelsVisible = self.isLabels;
+		[toggle.layer setAnchorPoint:(CGPoint){ 0.5, 0.5 }];
+		[toggle.layer setFrame:(CGRect){ togglePosition, self.toggleSize}];
+	}
+}
+
+- (void)layoutVertical {
+
+	CCUILabeledRoundButton *toggle = nil;
+	CGPoint togglePosition = { self.spaceWidth, self.spaceHeight };
+
+	int pageIndex = 0;
 
 	for (int i = 0; i < toggleTotal; i++) {
 		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
 
 		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
 			pageIndex++;
-			togglePosition.x = (isPagingCollapsed) ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x;
-			togglePosition.y = self.spaceHeight;
-		} else if ((i) && IS_NEW_ROW(i, columnCollapsed)) {
-			togglePosition.x = (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth - (isPagingCollapsed ? 0 : (self.spaceWidth * pageIndex));
+			togglePosition.x = self.spaceWidth;
+			togglePosition.y = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.height) : togglePosition.y + self.toggleSize.height) + self.spaceHeight;
+		} else if ((i) && IS_NEW_ROW(i, self.column)) {
+			togglePosition.x = self.spaceWidth;
 			togglePosition.y += self.toggleSize.height + self.spaceHeight;
+		} else if (i) {
+			togglePosition.x += self.toggleSize.width + self.spaceWidth;
 		}
 
-		toggle.labelsVisible = NO;
+		toggle.labelsVisible = self.isLabels;
 		[toggle.layer setAnchorPoint:(CGPoint){ 0.5, 0.5 }];
 		[toggle.layer setFrame:(CGRect){ togglePosition, self.toggleSize}];
-
-		togglePosition.x += self.toggleSize.width + self.spaceWidth;
 	}
 }
 
-- (void)layoutExpanded {
+- (void)layoutScrollView {
 
-	CGSize toggleSize = self.toggleSize;
-	toggleSize.height = (self.scrollView.subviews[0].subviews[0].frame.size.height * 2) + self.toggleSize.height + 8;
-
-	self.toggleExpanded = columnExpanded * rowExpanded;
-	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, columnExpanded, toggleSize.width);
-	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, rowExpanded, toggleSize.height);
-
-	CCUILabeledRoundButton *toggle = nil;
-	CGPoint togglePosition = { 0, 0 };
-
-	int pageIndex = -1;
-
-	[self layoutScrollViewExtanded];
-
-	for (int i = 0; i < toggleTotal; i++) {
-		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
-
-		if (IS_NEW_PAGE(i, self.toggleExpanded)) {
-			pageIndex++;
-			togglePosition.x = self.spaceWidth;
-			togglePosition.y = (pageIndex * self.scrollView.bounds.size.height) + self.spaceHeight;
-		} else if (IS_NEW_ROW(i, columnExpanded)) {
-			togglePosition.x = self.spaceWidth;
-			togglePosition.y += toggleSize.height + self.spaceHeight;
-		}
-
-		toggle.labelsVisible = isLabelsExpanded;
-		[toggle.layer setAnchorPoint:(CGPoint){ 0.5, 0.5 }];
-		[toggle.layer setFrame:(CGRect){ togglePosition, toggleSize}];
-
-		togglePosition.x += toggleSize.width + self.spaceWidth;
+	self.scrollView.contentSize = [self getScrollViewContentSize];
+	self.scrollView.indicatorStyle = (isIndicatorDark) ? 1 : 2;
+	self.scrollView.pagingEnabled = (self.isExpanded) ? isPagingExpanded : isPagingCollapsed;
+	self.scrollView.scrollIndicatorInsets = (isScrollVertical && self.isExpanded) ? (UIEdgeInsets){ 40, 0, 40, 0 } : (UIEdgeInsets){ 0, 30, 0, 30 };
+	if (self.isExpanded) {
+		self.scrollView.showsHorizontalScrollIndicator = (isScrollVertical) ? NO : (isIndicatorExpanded);
+		self.scrollView.showsVerticalScrollIndicator = (isScrollVertical) ? (isIndicatorExpanded) : NO;
+	} else {
+		self.scrollView.showsHorizontalScrollIndicator = (isIndicatorCollapsed);
+		self.scrollView.showsVerticalScrollIndicator = NO;
 	}
 }
 
 - (void)layoutScrollViewCollapsed {
 
-	self.scrollView.contentSize = [self getScrollViewContentSize];
-	self.scrollView.indicatorStyle = (isIndicatorDark) ? 1 : 2;
-	self.scrollView.pagingEnabled = isPagingCollapsed;
-	self.scrollView.showsHorizontalScrollIndicator = (isIndicatorCollapsed) ? YES : NO;
-	self.scrollView.showsVerticalScrollIndicator = NO;
-	self.scrollView.scrollIndicatorInsets = (UIEdgeInsets){ 0, 20, 0, 20 };
 	[self.scrollView scrollRectToVisible:SCROLL_TO_PAGE_HORIZONTAL(self.scrollView.bounds, scrollToPageCollapsed) animated:NO];
 }
 
 - (void)layoutScrollViewExtanded {
 
-	self.scrollView.contentSize = [self getScrollViewContentSize];
-	self.scrollView.indicatorStyle = (isIndicatorDark) ? 1 : 2;
-	self.scrollView.pagingEnabled = isPagingExpanded;
-	self.scrollView.showsHorizontalScrollIndicator = NO;
-	self.scrollView.showsVerticalScrollIndicator = (isIndicatorExpanded) ? YES : NO;
-	self.scrollView.scrollIndicatorInsets = (UIEdgeInsets){ 40, 0, 40, 0 };
 	[self.scrollView scrollRectToVisible:SCROLL_TO_PAGE_VERTICAL(self.scrollView.bounds, scrollToPageExtanded) animated:NO];
 }
 
@@ -194,15 +217,31 @@ static const int scrollToPageExtanded = 0;
 	NSInteger multiplier;
 	CGSize contentSize = self.scrollView.bounds.size;
 
-	if (isPagingCollapsed || isPagingExpanded) {
-		multiplier = GET_PAGE_TOTAL(toggleTotal, self.togglePage);
-		if (self.isExpanded)
-			contentSize.height *= multiplier;
-		else
-			contentSize.width *= multiplier;
+	if (self.isExpanded) {
+		if (isPagingExpanded) {
+			multiplier = GET_PAGE_TOTAL(toggleTotal, self.togglePage);
+			if (isScrollVertical) {
+				contentSize.height *= multiplier;
+			} else {
+				contentSize.width *= multiplier;
+			}
+		} else {
+			if (isScrollVertical) {
+				multiplier = GET_ROW_TOTAL(toggleTotal, self.togglePage, self.row);
+				contentSize.height = self.spaceHeight + ((self.toggleSize.height + self.spaceHeight) * multiplier);
+			} else {
+				multiplier = GET_COLUMN_TOTAL(toggleTotal, self.togglePage, self.column);
+				contentSize.width = self.spaceWidth + ((self.toggleSize.width + self.spaceWidth) * multiplier);
+			}
+		}
 	} else {
-		multiplier = GET_TOGGLE_ROW_TOTAL(toggleTotal, rowCollapsed);
-		contentSize.width = self.spaceWidth + ((self.toggleSize.width + self.spaceWidth) * multiplier);
+		if (isPagingCollapsed) {
+			multiplier = GET_PAGE_TOTAL(toggleTotal, self.togglePage);
+			contentSize.width *= multiplier;
+		} else {
+			multiplier = GET_COLUMN_TOTAL(toggleTotal, self.togglePage, self.column);
+			contentSize.width = self.spaceWidth + ((self.toggleSize.width + self.spaceWidth) * multiplier);
+		}
 	}
 
 	return contentSize;
@@ -229,4 +268,10 @@ static const int scrollToPageExtanded = 0;
 
 // if (!(toggleTotal - (i + 1))) {
 // 	pageSpaceWidth = ((scrollViewSize.width - toggleSizeWidth) / 2);
+// }
+
+// CGSize toggleSize = self.toggleSize;
+// if (isLabelsExpanded) {
+// 	toggleSize.height = (self.scrollView.subviews[0].subviews[0].frame.size.height * 2) + self.toggleSize.height + 8;
+// 	toggleSize.width = toggleSize.height * 1.5;
 // }
