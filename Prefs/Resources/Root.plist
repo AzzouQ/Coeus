@@ -2,270 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>title</key>
 	<string>Coeus</string>
+
 	<key>items</key>
 	<array>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Module Size</string>
-			<key>footerText</key>
-			<string>1st slider define the width, 2nd define the height</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>moduleWidth</string>
-			<key>default</key>
-			<real>4</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>moduleHeight</string>
-			<key>default</key>
-			<real>1</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Dark slider indicator</string>
-			<key>key</key>
-			<string>isIndicatorDark</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
 
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Collapsed Layout</string>
-			<key>footerText</key>
-			<string>1st slider define the number of columns, 2nd define the number of rows</string>
+			<string>Settings</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>columnCollapsed</string>
-			<key>default</key>
-			<real>5</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>rowCollapsed</string>
-			<key>default</key>
-			<real>1</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Paging</string>
-			<key>key</key>
-			<string>isPagingCollapsed</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Show slide indicator</string>
-			<key>key</key>
-			<string>isIndicatorCollapsed</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Show labels</string>
-			<key>key</key>
-			<string>isLabelsCollapsed</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
+ 			<key>cell</key>
+ 			<string>PSLinkCell</string>
+ 			<key>label</key>
+ 			<string>Module</string>
+ 			<key>detail</key>
+ 			<string>CoeusModuleListController</string>
+ 			<key>CoeusSub</key>
+ 			<string>Module</string>
+ 		</dict>
 
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Expanded Layout</string>
-			<key>footerText</key>
-			<string>1st slider define the number of columns, 2nd define the number of rows</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>columnExpanded</string>
-			<key>default</key>
-			<real>2</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>key</key>
-			<string>rowExpanded</string>
-			<key>default</key>
-			<real>3</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Paging</string>
-			<key>key</key>
-			<string>isPagingExpanded</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Show slide indicator</string>
-			<key>key</key>
-			<string>isIndicatorExpanded</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Show labels</string>
-			<key>key</key>
-			<string>isLabelsExpanded</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>label</key>
-			<string>Scroll Verticaly</string>
-			<key>key</key>
-			<string>isScrollVertical</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Other Options</string>
+			<string>Options</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -288,78 +53,18 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Life saver people</string>
-			<key>footerText</key>
-			<string>Special thanks to Constanze for pointing my dumbiness out once again
-Special thanks to Little Denial for doing maths with me at 6am</string>
+			<string>Contributors</string>
 		</dict>
 		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>Little Litten</string>
-            <key>user</key>
-            <string>Litteeen</string>
-        </dict>
-		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>Taki</string>
-            <key>user</key>
-            <string>74k1_</string>
-        </dict>
-		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>opa334</string>
-            <key>user</key>
-            <string>opa334dev</string>
-        </dict>
-		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>Muirey03</string>
-            <key>user</key>
-            <string>Muirey03</string>
-        </dict>
-		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>Hamza Sood</string>
-            <key>user</key>
-            <string>hamzasood</string>
-        </dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Original idea</string>
-		</dict>
-		<dict>
-            <key>cell</key>
-            <string>PSButtonCell</string>
-            <key>cellClass</key>
-            <string>HBTwitterCell</string>
-            <key>label</key>
-            <string>A3Tweaks</string>
-            <key>user</key>
-            <string>A3Tweaks</string>
-        </dict>
+ 			<key>cell</key>
+ 			<string>PSLinkCell</string>
+ 			<key>label</key>
+ 			<string>Contributors</string>
+ 			<key>detail</key>
+ 			<string>CoeusContributorsListController</string>
+ 			<key>CoeusSub</key>
+ 			<string>Contributors</string>
+ 		</dict>
 
 		<dict>
 			<key>cell</key>
@@ -377,6 +82,18 @@ Special thanks to Little Denial for doing maths with me at 6am</string>
 			<key>url</key>
 			<string>https://github.com/AzzouDuGhetto/Coeus</string>
 		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
+			<string>Support me</string>
+			<key>subtitle</key>
+			<string>Paypal</string>
+			<key>url</key>
+			<string>https://paypal.me/Azzou</string>
+		</dict>
+
 	</array>
+
 </dict>
 </plist>

@@ -95,7 +95,7 @@
 	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
 	[blurView setFrame:self.view.bounds];
 	[blurView setAlpha:1.0];
-	[[self view] addSubview:blurView];
+	[self.view addSubview:blurView];
 
 	[UIView animateWithDuration:.4 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 		[blurView setAlpha:0.0];

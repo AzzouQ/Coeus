@@ -17,4 +17,4 @@ static NSInteger	rowExpanded;
 static BOOL			isIndicatorExpanded;
 static BOOL			isPagingExpanded;
 static BOOL			isLabelsExpanded;
-static BOOL         isScrollVertical;
+static BOOL			isScrollVertical;

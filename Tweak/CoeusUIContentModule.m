@@ -20,7 +20,7 @@
 	[prefs registerUnsignedInteger:&moduleWidth default:4 forKey:@"moduleWidth"];
 	[prefs registerUnsignedInteger:&moduleHeight default:1 forKey:@"moduleHeight"];
 
-    return (CCUILayoutSize){ moduleWidth, moduleHeight};
+	return (CCUILayoutSize){ moduleWidth, moduleHeight};
 }
 
 

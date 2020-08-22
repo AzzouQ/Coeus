@@ -9,7 +9,7 @@
 @end
 
 @interface CoeusRootListController : HBRootListController {
-    UITableView *_table;
+	UITableView *_table;
 }
 
 @property (nonatomic, retain) UIView *headerView;
