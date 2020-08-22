@@ -14,16 +14,16 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Module Size</string>
-			<key>footerText</key>
-			<string>1st slider define the width, 2nd define the height</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Height</string>
 			<key>key</key>
-			<string>moduleWidth</string>
+			<string>moduleHeight</string>
 			<key>default</key>
-			<real>4</real>
+			<real>1</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -38,10 +38,12 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Width</string>
 			<key>key</key>
-			<string>moduleHeight</string>
+			<string>moduleWidth</string>
 			<key>default</key>
-			<real>1</real>
+			<real>4</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -73,16 +75,16 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Collapsed Layout</string>
-			<key>footerText</key>
-			<string>1st slider define the number of columns, 2nd define the number of rows</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Height</string>
 			<key>key</key>
-			<string>columnCollapsed</string>
+			<string>rowCollapsed</string>
 			<key>default</key>
-			<real>5</real>
+			<real>1</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -99,10 +101,12 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Width</string>
 			<key>key</key>
-			<string>rowCollapsed</string>
+			<string>columnCollapsed</string>
 			<key>default</key>
-			<real>1</real>
+			<real>5</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
@@ -164,20 +168,20 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Expanded Layout</string>
-			<key>footerText</key>
-			<string>1st slider define the number of columns, 2nd define the number of rows</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Height</string>
 			<key>key</key>
-			<string>columnExpanded</string>
+			<string>rowExpanded</string>
 			<key>default</key>
-			<real>2</real>
+			<real>3</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
-			<real>4</real>
+			<real>5</real>
 			<key>showValue</key>
 			<false/>
 			<key>isSegmented</key>
@@ -190,14 +194,16 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
+			<key>leftImage</key>
+			<string>Width</string>
 			<key>key</key>
-			<string>rowExpanded</string>
+			<string>columnExpanded</string>
 			<key>default</key>
-			<real>3</real>
+			<real>2</real>
 			<key>min</key>
 			<real>1</real>
 			<key>max</key>
-			<real>5</real>
+			<real>4</real>
 			<key>showValue</key>
 			<false/>
 			<key>isSegmented</key>

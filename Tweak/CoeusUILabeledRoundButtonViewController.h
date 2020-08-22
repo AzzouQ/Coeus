@@ -7,7 +7,8 @@
 @interface CoeusUILabeledRoundButtonViewController : CCUILabeledRoundButtonViewController
 
 @property (nonatomic, retain) CoeusLAEvent *event;
-@property (nonatomic, assign) NSString *eventIdentifier;
+@property (nonatomic, retain) LAEvent *LAEvent;
+@property (nonatomic, retain) NSString *listenerName;
 
 - (id)initWithEventIdentifier:(NSString *)eventIdentifier;
 

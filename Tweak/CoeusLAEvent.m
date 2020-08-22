@@ -20,11 +20,11 @@
 }
 
 - (NSString *)localizedTitleForEventName:(NSString *)eventName {
-	return self.eventIdentifier;
+	return [NSString stringWithFormat:@"Toggle %@", [[self.eventIdentifier componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
 }
 
 - (NSString *)localizedDescriptionForEventName:(NSString *)eventName {
-	return self.eventIdentifier;
+	return @"Tap on toggle";
 }
 
 @end
