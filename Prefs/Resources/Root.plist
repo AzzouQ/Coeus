@@ -11,20 +11,13 @@
 
 		<dict>
 			<key>cell</key>
-			<string>PSListItemCell</string>
-			<key>label</key>
-			<string>Test</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Settings</string>
 		</dict>
 		<dict>
  			<key>cell</key>
- 			<string>PSLinkCell</string>
+			 <string>PSLinkCell</string>
  			<key>label</key>
  			<string>Module</string>
  			<key>detail</key>
@@ -32,6 +25,18 @@
  			<key>CoeusSub</key>
  			<string>Module</string>
  		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Toggle</string>
+			<key>detail</key>
+ 			<string>CoeusToggleListController</string>
+			<key>CoeusSub</key>
+ 			<string>Toggle</string>
+			<key>isController</key>
+			<true/>
+		</dict>
 
 		<dict>
 			<key>cell</key>

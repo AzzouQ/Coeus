@@ -5,6 +5,9 @@
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
 
+@interface PSEditableListController : PSListController
+@end
+
 @interface CoeusAppearanceSettings : HBAppearanceSettings
 @end
 

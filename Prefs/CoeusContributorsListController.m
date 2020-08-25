@@ -41,6 +41,12 @@
 	} completion:nil];
 }
 
+- (void)setSpecifier:(PSSpecifier *)specifier {
+
+	[self loadFromSpecifier:specifier];
+	[super setSpecifier:specifier];
+}
+
 - (void)loadFromSpecifier:(PSSpecifier *)specifier {
 
 	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
@@ -50,12 +56,6 @@
 
 	[self setTitle:title];
 	[self.navigationItem setTitle:title];
-}
-
-- (void)setSpecifier:(PSSpecifier *)specifier {
-
-	[self loadFromSpecifier:specifier];
-	[super setSpecifier:specifier];
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {

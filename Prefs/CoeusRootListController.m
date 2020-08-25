@@ -14,7 +14,7 @@
 		self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 		self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
 		self.titleLabel.text = @"1.0";
-		self.titleLabel.textColor = [UIColor whiteColor];
+		self.titleLabel.textColor = [UIColor colorWithRed:0.96 green:0.77 blue:0.75 alpha:1.0];
 		self.titleLabel.textAlignment = NSTextAlignmentCenter;
 
 		self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
@@ -117,7 +117,6 @@
 	[self.navigationController.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
 }
 
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
 	CGFloat offsetY = scrollView.contentOffset.y;
@@ -137,20 +136,20 @@
 
 - (void)reset {
 
-	UIAlertController* resetAlert = [UIAlertController alertControllerWithTitle:@"Coeus"
+	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Coeus"
 	message:@"Do you really want to reset preferences ?"
 	preferredStyle:UIAlertControllerStyleActionSheet];
 	
-	UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"Yeah" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yeah" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 
-		HBPreferences* preferences = [[HBPreferences alloc] initWithIdentifier: @"com.azzou.coeusprefs"];
-		for (NSString* key in [preferences dictionaryRepresentation]) {
+		HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier: @"com.azzou.coeusprefs"];
+		for (NSString *key in [preferences dictionaryRepresentation]) {
 			[preferences removeObjectForKey:key];
 		}
 		[self respring];
 	}];
 
-	UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Nah" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Nah" style:UIAlertActionStyleCancel handler:nil];
 
 	[resetAlert addAction:confirmAction];
 	[resetAlert addAction:cancelAction];
