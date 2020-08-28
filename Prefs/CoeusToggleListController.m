@@ -44,8 +44,7 @@ typedef struct {
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
 	for (NSArray *toggle in toggleList) {
-		PSSpecifier *toggleSpec = [self createSpec:[toggle objectAtIndex:0]];
-		[self addSpec:toggleSpec];
+		[self addSpecifier:[self createSpec:[toggle objectAtIndex:0]]];
 	}
 
 	[self setTitle:title];
@@ -75,7 +74,7 @@ typedef struct {
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		PSSpecifier *toggleSpec = [self createSpec:[addAlert.textFields[0] text]];
 		[self saveToggle:toggleSpec];
-		[self addSpec:toggleSpec];
+		[self addSpecifier:toggleSpec];
 		[self reload];
 	}];
 
@@ -98,13 +97,6 @@ typedef struct {
 	[newToggle setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
 	return newToggle;
-}
-
-- (void)addSpec:(PSSpecifier *)spec {
-
-	NSMutableArray *specs = [(NSArray*)_specifiers mutableCopy];
-	[specs addObject:spec];
-	_specifiers = [specs copy];
 }
 
 - (NSArray *)getToggle:(PSSpecifier *)spec {

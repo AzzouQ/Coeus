@@ -145,10 +145,10 @@ static const int scrollToPageExtanded = 0;
 
 		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
 			pageIndex++;
-			togglePosition.x = (isScrollVertical) ? self.spaceWidth : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) : togglePosition.x + self.toggleSize.width) + self.spaceWidth;
-			togglePosition.y = !(isScrollVertical) ? self.spaceHeight : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.height) : togglePosition.y + self.toggleSize.height) + self.spaceHeight;
+			togglePosition.x = (self.isScrollVertical ? self.spaceWidth : (self.isPaging ? (pageIndex * self.scrollView.bounds.size.width) : togglePosition.x + self.toggleSize.width) + self.spaceWidth);
+			togglePosition.y = (self.isScrollVertical ? (self.isPaging ? (pageIndex * self.scrollView.bounds.size.height) : togglePosition.y + self.toggleSize.height) + self.spaceHeight : self.spaceHeight);
 		} else if ((i) && IS_NEW_ROW(i, self.column)) {
-			togglePosition.x = (isScrollVertical) ? self.spaceWidth : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x - ((self.column - 1) * (self.toggleSize.width + self.spaceWidth)));
+			togglePosition.x = (self.isScrollVertical ? self.spaceWidth : (self.isPaging ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x - ((self.column - 1) * (self.toggleSize.width + self.spaceWidth))));
 			togglePosition.y += self.toggleSize.height + self.spaceHeight;
 		} else if (i) {
 			togglePosition.x += self.toggleSize.width + self.spaceWidth;
