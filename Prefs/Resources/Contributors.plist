@@ -48,8 +48,6 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Doing maths with me at 6am 🤯</string>
-			<key>footerText</key>
-			<string>Special thanks to Constanze for pointing my dumbiness out once again</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -60,6 +58,23 @@
 			<string>Little Denial</string>
 			<key>user</key>
 			<string>danielpan1234</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Helped with prefs, pointing my dumbiness out 🙄</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>HBTwitterCell</string>
+			<key>label</key>
+			<string>Constanze</string>
+			<key>user</key>
+			<string>JulzTDG</string>
 		</dict>
 
 		<dict>
