@@ -14,8 +14,6 @@
 #define SCROLL_TO_PAGE_HORIZONTAL(scrollViewBounds, scrollToPage) (CGRect){{ scrollViewBounds.size.width * scrollToPage, scrollViewBounds.origin.y }, scrollViewBounds.size }
 #define SCROLL_TO_PAGE_VERTICAL(scrollViewBounds, scrollToPage) (CGRect){{ scrollViewBounds.origin.x, scrollViewBounds.size.width * scrollToPage }, scrollViewBounds.size }
 
-static const int toggleTotal = 20;
-
 static const int scrollToPageCollapsed = 0;
 static const int scrollToPageExtanded = 0;
 
@@ -38,6 +36,8 @@ static const int scrollToPageExtanded = 0;
 - (void)initPreferences {
 
 	[prefs registerBool:&isIndicatorDark default:NO forKey:@"isIndicatorDark"];
+
+	[prefs registerObject:&toggleList default:Nil forKey:@"toggleList"];
 
 	[prefs registerInteger:&columnCollapsed default:5 forKey:@"columnCollapsed"];
 	[prefs registerInteger:&rowCollapsed default:1 forKey:@"rowCollapsed"];
@@ -68,13 +68,12 @@ static const int scrollToPageExtanded = 0;
 
 	CoeusUILabeledRoundButtonViewController *toggle;
 
-	for (int i = 0; i < toggleTotal; i++) {
+	for (int i = 0; i < [toggleList count]; i++) {
 		toggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithEventIdentifier:[NSString stringWithFormat:@"com.azzou.coeus.toggle%d", (i + 1)]];
 
 		[toggle.view.layer setFrame:(CGRect){ {0, 0}, [toggle.view sizeThatFits:self.view.bounds.size] }];
 
-		toggle.title = [NSString stringWithFormat:@"Title %d", (i + 1)];
-		toggle.subtitle = @"Disabled";
+		toggle.title = [toggleList[i] objectAtIndex:0];
 		toggle.useAlternateBackground = NO;
 		toggle.labelsVisible = YES;
 
@@ -99,10 +98,10 @@ static const int scrollToPageExtanded = 0;
 
 	[super viewWillAppear:animated];
 
-	[self layoutCollapsed];
+	[self setCollapsedLayout];
 }
 
-- (void)layoutCollapsed {
+- (void)setCollapsedLayout {
 
 	self.isPaging = isPagingCollapsed;
 	self.isLabels = isLabelsCollapsed;
@@ -115,11 +114,10 @@ static const int scrollToPageExtanded = 0;
 	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
 
 	[self setScrollView];
-
-	[self layoutHorizontal];
+	[self setLayout];
 }
 
-- (void)layoutExpanded {
+- (void)setExpandedLayout {
 
 	self.isPaging = isPagingExpanded;
 	self.isLabels = isLabelsExpanded;
@@ -132,53 +130,25 @@ static const int scrollToPageExtanded = 0;
 	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
 
 	[self setScrollView];
-
-	(isScrollVertical) ? [self layoutVertical] : [self layoutHorizontal];
+	[self setLayout];
 }
 
-- (void)layoutHorizontal {
+- (void)setLayout {
 
 	CCUILabeledRoundButton *toggle = nil;
 	CGPoint togglePosition = { self.spaceWidth, self.spaceHeight };
 
 	int pageIndex = 0;
 
-	for (int i = 0; i < toggleTotal; i++) {
+	for (int i = 0; i < [toggleList count]; i++) {
 		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
 
 		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
 			pageIndex++;
-			togglePosition.x = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) : togglePosition.x + self.toggleSize.width) + self.spaceWidth;
-			togglePosition.y = self.spaceHeight;
+			togglePosition.x = (isScrollVertical) ? self.spaceWidth : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) : togglePosition.x + self.toggleSize.width) + self.spaceWidth;
+			togglePosition.y = !(isScrollVertical) ? self.spaceHeight : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.height) : togglePosition.y + self.toggleSize.height) + self.spaceHeight;
 		} else if ((i) && IS_NEW_ROW(i, self.column)) {
-			togglePosition.x = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x - ((self.column - 1) * (self.toggleSize.width + self.spaceWidth)));
-			togglePosition.y += self.toggleSize.height + self.spaceHeight;
-		} else if (i) {
-			togglePosition.x += self.toggleSize.width + self.spaceWidth;
-		}
-
-		[toggle.layer setAnchorPoint:(CGPoint){ 0.5, 0.5 }];
-		[toggle.layer setFrame:(CGRect){ togglePosition, self.toggleSize}];
-		toggle.labelsVisible = self.isLabels;
-	}
-}
-
-- (void)layoutVertical {
-
-	CCUILabeledRoundButton *toggle = nil;
-	CGPoint togglePosition = { self.spaceWidth, self.spaceHeight };
-
-	int pageIndex = 0;
-
-	for (int i = 0; i < toggleTotal; i++) {
-		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
-
-		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
-			pageIndex++;
-			togglePosition.x = self.spaceWidth;
-			togglePosition.y = ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.height) : togglePosition.y + self.toggleSize.height) + self.spaceHeight;
-		} else if ((i) && IS_NEW_ROW(i, self.column)) {
-			togglePosition.x = self.spaceWidth;
+			togglePosition.x = (isScrollVertical) ? self.spaceWidth : ((self.isPaging) ? (pageIndex * self.scrollView.bounds.size.width) + self.spaceWidth : togglePosition.x - ((self.column - 1) * (self.toggleSize.width + self.spaceWidth)));
 			togglePosition.y += self.toggleSize.height + self.spaceHeight;
 		} else if (i) {
 			togglePosition.x += self.toggleSize.width + self.spaceWidth;
@@ -213,18 +183,18 @@ static const int scrollToPageExtanded = 0;
 
 	if (self.isScrollVertical) {
 		if (self.isPaging) {
-			multiplier = GET_PAGE_TOTAL(toggleTotal, self.togglePage);
+			multiplier = GET_PAGE_TOTAL([toggleList count], self.togglePage);
 			contentSize.height *= multiplier;
 		} else {
-			multiplier = GET_ROW_TOTAL(toggleTotal, self.togglePage, self.row, self.column);
+			multiplier = GET_ROW_TOTAL([toggleList count], self.togglePage, self.row, self.column);
 			contentSize.height = self.spaceHeight + ((self.toggleSize.height + self.spaceHeight) * multiplier);
 		}
 	} else {
 		if (self.isPaging) {
-			multiplier = GET_PAGE_TOTAL(toggleTotal, self.togglePage);
+			multiplier = GET_PAGE_TOTAL([toggleList count], self.togglePage);
 			contentSize.width *= multiplier;
 		} else {
-			multiplier = GET_COLUMN_TOTAL(toggleTotal, self.togglePage, self.column);
+			multiplier = GET_COLUMN_TOTAL([toggleList count], self.togglePage, self.column);
 			contentSize.width = self.spaceWidth + ((self.toggleSize.width + self.spaceWidth) * multiplier);
 		}
 	}
@@ -239,7 +209,7 @@ static const int scrollToPageExtanded = 0;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context){
-		(self.isExpanded) ? [self layoutExpanded] : [self layoutCollapsed];
+		(self.isExpanded) ? [self setExpandedLayout] : [self setCollapsedLayout];
 	} completion:nil];
 }
 

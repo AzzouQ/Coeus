@@ -4,26 +4,16 @@
 
 - (instancetype)initWithEventIdentifier:(NSString *)eventIdentifier {
 
+	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:@"Power" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
+		return self;
+	}
+
 	if ((self.event = [[CoeusLAEvent alloc] initWithEventIdentifier:eventIdentifier])) {
+
 		self.LAEvent = [LAEvent eventWithName:self.event.eventIdentifier mode:[LASharedActivator currentEventMode]];
 		self.listenerName = [LASharedActivator assignedListenerNameForEvent:self.LAEvent];
 	}
-	UIImage *image;
-	if (!(image = [LASharedActivator iconForListenerName:self.listenerName])) {
-		image = [UIImage imageNamed:@"Power" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
-	}
-	// [super setEnabled:YES];
-	// [super setInoperative:YES];
-	// [self setEnabled:YES];
-	// [self setInoperative:YES];
-	if ((self = [super initWithGlyphImage:image highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 
-		return self;
-	}
-	// [super setEnabled:YES];
-	// [super setInoperative:YES];
-	// [self setEnabled:YES];
-	// [self setInoperative:YES];
 	return self;
 }
 
@@ -34,8 +24,29 @@
 	if (self.LAEvent.handled) {
 		if ([self.listenerName containsString:@"switch-"]) {
   			[super buttonTapped:arg1];
+			[super setSubtitle:([self.subtitle isEqualToString:@"Enabled"] ? @"Disabled" : @"Enabled")];
 		}
     }
+}
+
+- (void)viewDidLoad {
+
+	FSSwitchPanel *fsp = [FSSwitchPanel sharedPanel];
+	NSString *switchIdentifier = [self.listenerName stringByReplacingOccurrencesOfString:@"switch-flip." withString:@""];
+
+	if ([self.listenerName containsString:@"switch-"]) {
+		switchIdentifier = [switchIdentifier stringByReplacingOccurrencesOfString:@"switch-on." withString:@""];
+		switchIdentifier = [switchIdentifier stringByReplacingOccurrencesOfString:@"switch-off." withString:@""];
+
+		FSSwitchState state = [fsp stateForSwitchIdentifier:switchIdentifier];
+
+		if (FSSwitchStateOn == state) {
+			[super setEnabled:YES];
+			[super setSubtitle:@"Enabled"];
+		} else {
+			[super setSubtitle:@"Disabled"];
+		}
+	}
 }
 
 - (BOOL)_canShowWhileLocked {

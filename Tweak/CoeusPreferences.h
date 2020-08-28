@@ -6,6 +6,8 @@ static NSUInteger	moduleWidth;
 static NSUInteger	moduleHeight;
 static BOOL			isIndicatorDark;
 
+static NSArray      *toggleList;
+
 static NSInteger	columnCollapsed;
 static NSInteger	rowCollapsed;
 static BOOL			isIndicatorCollapsed;

@@ -22,6 +22,15 @@
 			<string>Add new toggle</string>
 			<key>action</key>
 			<string>addToggle</string>
+			<key>icon</key>
+			<string>Plus2</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Toggles</string>
 		</dict>
 
 	</array>
