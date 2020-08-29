@@ -2,9 +2,10 @@
 
 @implementation CoeusLAEvent
 
-- (instancetype)initWithEventIdentifier:(NSString *)eventIdentifier {
+- (instancetype)initWithToggle:(NSArray *)toggle {
 	if ((self = [super init])) {
-		self.eventIdentifier = eventIdentifier;
+		self.eventIdentifier = [NSString stringWithFormat:@"com.azzou.coeus.toggle%@", [toggle objectAtIndex:1]];
+		self.titleForEventName = [NSString stringWithFormat:@"%@", [toggle objectAtIndex:0]];
 		[LASharedActivator registerEventDataSource:self forEventName:self.eventIdentifier];
 	}
 	return self;
@@ -20,7 +21,7 @@
 }
 
 - (NSString *)localizedTitleForEventName:(NSString *)eventName {
-	return [NSString stringWithFormat:@"Toggle %@", [[self.eventIdentifier componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""]];
+	return self.titleForEventName;
 }
 
 - (NSString *)localizedDescriptionForEventName:(NSString *)eventName {

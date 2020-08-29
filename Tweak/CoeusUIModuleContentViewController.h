@@ -1,5 +1,6 @@
 #import <ControlCenterUIKit/CCUIContentModuleContentViewController.h>
 
+#import "CoeusPreferences.h"
 #import "CoeusUILabeledRoundButtonViewController.h"
 
 @interface CoeusUIModuleContentViewController : UIViewController <CCUIContentModuleContentViewController>

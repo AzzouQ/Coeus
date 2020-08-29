@@ -1,11 +1,5 @@
 #import "CoeusToggleListController.h"
 
-typedef struct {
-	NSString *name;
-	NSString *glyph;
-} ToggleObject;
-
-
 @implementation CoeusToggleListController
 
 - (id)specifiers {
@@ -102,15 +96,18 @@ typedef struct {
 - (NSArray *)getToggle:(PSSpecifier *)spec {
 
 	NSString *name = [spec name];
-	NSArray *newToggle = [[NSArray alloc] initWithObjects:name, nil];
+	NSNumber *index = [NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]];
 
-	return newToggle;
+	return [[NSArray alloc] initWithObjects:name, index, nil];
 }
 
 - (void)saveToggle:(PSSpecifier *)spec {
 
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
+	if (!(toggleList)) {
+		toggleList = [[NSMutableArray alloc] init];
+	}
 
 	[toggleList addObject:[self getToggle:spec]];
 

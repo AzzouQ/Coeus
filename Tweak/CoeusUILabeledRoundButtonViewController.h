@@ -11,6 +11,6 @@
 @property (nonatomic, retain) LAEvent *LAEvent;
 @property (nonatomic, retain) NSString *listenerName;
 
-- (id)initWithEventIdentifier:(NSString *)eventIdentifier;
+- (id)initWithToggle:(NSArray *)toggle;
 
 @end

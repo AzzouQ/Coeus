@@ -2,13 +2,13 @@
 
 @implementation CoeusUILabeledRoundButtonViewController
 
-- (instancetype)initWithEventIdentifier:(NSString *)eventIdentifier {
+- (instancetype)initWithToggle:(NSArray *)toggle {
 
 	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:@"Power" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;
 	}
 
-	if ((self.event = [[CoeusLAEvent alloc] initWithEventIdentifier:eventIdentifier])) {
+	if ((self.event = [[CoeusLAEvent alloc] initWithToggle:toggle])) {
 
 		self.LAEvent = [LAEvent eventWithName:self.event.eventIdentifier mode:[LASharedActivator currentEventMode]];
 		self.listenerName = [LASharedActivator assignedListenerNameForEvent:self.LAEvent];
