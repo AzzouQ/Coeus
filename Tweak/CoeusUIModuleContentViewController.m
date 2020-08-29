@@ -65,23 +65,23 @@ static const int scrollToPageExtanded = 0;
 
 - (void)intiToggles {
 
-	CoeusUILabeledRoundButtonViewController *newToggle = Nil;
+	CoeusUILabeledRoundButtonViewController *toggle = Nil;
 
-	for (NSArray *toggle in toggleList) {
-		newToggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithToggle:toggle];
+	for (NSArray *toggleInfo in toggleList) {
+		toggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithToggle:toggleInfo];
 
-		[newToggle.view.layer setFrame:(CGRect){ {0, 0}, [newToggle.view sizeThatFits:self.view.bounds.size] }];
+		[toggle.view.layer setFrame:(CGRect){ {0, 0}, [toggle.view sizeThatFits:self.view.bounds.size] }];
 
-		newToggle.title = [toggle objectAtIndex:0];
-		newToggle.useAlternateBackground = NO;
-		newToggle.labelsVisible = YES;
+		toggle.title = [toggleInfo objectAtIndex:0];
+		toggle.useAlternateBackground = NO;
+		toggle.labelsVisible = YES;
 
-		[self addChildViewController:newToggle];
-		[self.scrollView addSubview:newToggle.view];
-		[newToggle didMoveToParentViewController:self];
+		[self addChildViewController:toggle];
+		[self.scrollView addSubview:toggle.view];
+		[toggle didMoveToParentViewController:self];
 	}
-	if (newToggle) {
-		self.toggleSizeWithoutLabels = newToggle.view.layer.frame.size;
+	if (toggle) {
+		self.toggleSizeWithoutLabels = toggle.view.layer.frame.size;
 		self.toggleSizeWithLabels = (CGSize){self.toggleSizeWithoutLabels.width + 36.667, self.toggleSizeWithoutLabels.height + 36.667};
 	}
 }

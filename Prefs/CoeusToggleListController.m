@@ -7,28 +7,6 @@
 	return _specifiers;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-
-	[super viewDidAppear:animated];
-
-	[self.navigationController.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-
-	[super viewWillAppear:animated];
-
-	UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-	UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
-	[blurView setFrame:self.view.bounds];
-	[blurView setAlpha:1.0];
-	[self.view addSubview:blurView];
-
-	[UIView animateWithDuration:.4 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-		[blurView setAlpha:0.0];
-	} completion:nil];
-}
-
 - (void)loadFromSpecifier:(PSSpecifier *)specifier {
 
 	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
@@ -38,7 +16,7 @@
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
 	for (NSArray *toggle in toggleList) {
-		[self addSpecifier:[self createSpec:[toggle objectAtIndex:0]]];
+		[self addSpecifier:[self createSpec:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1]]];
 	}
 
 	[self setTitle:title];
@@ -66,7 +44,7 @@
 	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		PSSpecifier *toggleSpec = [self createSpec:[addAlert.textFields[0] text]];
+		PSSpecifier *toggleSpec = [self createSpec:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]]];
 		[self saveToggle:toggleSpec];
 		[self addSpecifier:toggleSpec];
 		[self reload];
@@ -78,25 +56,27 @@
 	[self presentViewController:addAlert animated:YES completion:nil];
 }
 
-- (PSSpecifier *)createSpec:(NSString *)name {
+- (PSSpecifier *)createSpec:(NSString *)name index:(NSNumber *)index {
 
-	PSSpecifier *newToggle = [PSSpecifier preferenceSpecifierNamed:name
+	PSSpecifier *toggleSpec = [PSSpecifier preferenceSpecifierNamed:name
 	target:self
 	set:NULL
 	get:NULL
-	detail:Nil
-	cell:PSTitleValueCell
+	detail:[CoeusToggleController class]
+	cell:PSLinkCell
 	edit:Nil];
 
-	[newToggle setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
+	[toggleSpec setProperty:@"Toggle" forKey:@"CoeusSub"];
+	[toggleSpec setProperty:index forKey:@"Index"];
+	[toggleSpec setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
-	return newToggle;
+	return toggleSpec;
 }
 
 - (NSArray *)getToggle:(PSSpecifier *)spec {
 
 	NSString *name = [spec name];
-	NSNumber *index = [NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]];
+	NSNumber *index = [spec propertyForKey:@"Index"];
 
 	return [[NSArray alloc] initWithObjects:name, index, nil];
 }

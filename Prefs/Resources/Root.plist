@@ -33,7 +33,7 @@
 			<key>detail</key>
  			<string>CoeusToggleListController</string>
 			<key>CoeusSub</key>
- 			<string>Toggle</string>
+ 			<string>ToggleList</string>
 			<key>isController</key>
 			<true/>
 		</dict>

@@ -5,7 +5,7 @@
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
 
-#include "../Tweak/CoeusPreferences.h"
+#import "../Tweak/CoeusPreferences.h"
 
 @interface CoeusAppearanceSettings : HBAppearanceSettings
 @end
