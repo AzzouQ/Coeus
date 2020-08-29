@@ -4,7 +4,7 @@
 
 - (instancetype)initWithToggle:(NSArray *)toggle {
 
-	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:@"Power" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
+	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:@"AirDrop" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;
 	}
 

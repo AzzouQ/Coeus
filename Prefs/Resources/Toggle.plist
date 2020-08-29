@@ -15,16 +15,24 @@
 			<key>label</key>
 			<string>Name</string>
 		</dict>
+
 		<dict>
 			<key>cell</key>
-			<string>PSEditTextCell</string>
-			<key>placeholder</key>
-			<string>Placeholder</string>
-			<key>key</key>
-			<string>savedName</string>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Activator</string>
+			<key>footerText</key>
+			<string>This setting will allow the toggle to be tapped anywhere. For more control over this behavior, use Activator's preferences</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Activator Action</string>
+			<key>action</key>
+			<string>setActivatorAction</string>
+		</dict>
+
 	</array>
 
 </dict>

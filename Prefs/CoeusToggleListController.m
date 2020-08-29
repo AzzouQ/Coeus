@@ -7,6 +7,13 @@
 	return _specifiers;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+
+	[super viewWillAppear:animated];
+
+	[self reload];
+}
+
 - (void)loadFromSpecifier:(PSSpecifier *)specifier {
 
 	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
@@ -16,7 +23,7 @@
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
 	for (NSArray *toggle in toggleList) {
-		[self addSpecifier:[self createSpec:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1]]];
+		[self addSpecifier:[self createSpecifier:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1]]];
 	}
 
 	[self setTitle:title];
@@ -34,6 +41,24 @@
 	return false;
 }
 
+- (PSSpecifier *)createSpecifier:(NSString *)name index:(NSNumber *)index {
+
+	PSSpecifier *toggleSpecifier = [PSSpecifier preferenceSpecifierNamed:name
+	target:self
+	set:NULL
+	get:NULL
+	detail:[CoeusToggleController class]
+	cell:PSLinkCell
+	edit:Nil];
+
+	[toggleSpecifier setProperty:@"Toggle" forKey:@"CoeusSub"];
+	[toggleSpecifier setProperty:index forKey:@"Index"];
+	[toggleSpecifier setButtonAction:@selector(setToggleController:)];
+	[toggleSpecifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
+
+	return toggleSpecifier;
+}
+
 - (void)addToggle {
 
 	UIAlertController *addAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle"
@@ -44,9 +69,9 @@
 	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		PSSpecifier *toggleSpec = [self createSpec:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]]];
-		[self saveToggle:toggleSpec];
-		[self addSpecifier:toggleSpec];
+		PSSpecifier *toggleSpecifier = [self createSpecifier:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]]];
+		[self saveToggle:toggleSpecifier];
+		[self addSpecifier:toggleSpecifier];
 		[self reload];
 	}];
 
@@ -56,32 +81,15 @@
 	[self presentViewController:addAlert animated:YES completion:nil];
 }
 
-- (PSSpecifier *)createSpec:(NSString *)name index:(NSNumber *)index {
+- (NSMutableArray *)getToggle:(PSSpecifier *)specifier {
 
-	PSSpecifier *toggleSpec = [PSSpecifier preferenceSpecifierNamed:name
-	target:self
-	set:NULL
-	get:NULL
-	detail:[CoeusToggleController class]
-	cell:PSLinkCell
-	edit:Nil];
+	NSString *name = [specifier name];
+	NSNumber *index = [specifier propertyForKey:@"Index"];
 
-	[toggleSpec setProperty:@"Toggle" forKey:@"CoeusSub"];
-	[toggleSpec setProperty:index forKey:@"Index"];
-	[toggleSpec setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
-
-	return toggleSpec;
+	return [[NSMutableArray alloc] initWithObjects:name, index, nil];
 }
 
-- (NSArray *)getToggle:(PSSpecifier *)spec {
-
-	NSString *name = [spec name];
-	NSNumber *index = [spec propertyForKey:@"Index"];
-
-	return [[NSArray alloc] initWithObjects:name, index, nil];
-}
-
-- (void)saveToggle:(PSSpecifier *)spec {
+- (void)saveToggle:(PSSpecifier *)specifier {
 
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
@@ -89,19 +97,24 @@
 		toggleList = [[NSMutableArray alloc] init];
 	}
 
-	[toggleList addObject:[self getToggle:spec]];
+	[toggleList addObject:[self getToggle:specifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
-- (void)removeToggle:(PSSpecifier *)spec {
+- (void)removeToggle:(PSSpecifier *)specifier {
 
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	[toggleList removeObject:[self getToggle:spec]];
+	[toggleList removeObject:[self getToggle:specifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
+}
+
+- (void)setToggleController:(PSSpecifier *)specifier {
+	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier];
+	[[self navigationController] pushViewController:toggleController animated:YES];
 }
 
 @end

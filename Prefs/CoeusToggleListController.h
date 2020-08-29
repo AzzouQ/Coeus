@@ -6,8 +6,8 @@
 
 @interface CoeusToggleListController : PSEditableListController
 
+- (PSSpecifier *)createSpecifier:(NSString *)name index:(NSNumber *)index;
 - (void)addToggle;
-- (PSSpecifier *)createSpec:(NSString *)name index:(NSNumber *)index;
 - (void)saveToggle:(PSSpecifier *)spec;
 
 @end
