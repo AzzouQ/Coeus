@@ -1,4 +1,5 @@
 #import "CoeusToggleController.h"
+#import "CoeusToggleGlyph.h"
 
 @implementation CoeusToggleController
 
@@ -30,7 +31,8 @@
 
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
-	[self insertSpecifier:[self createSpecifier] atIndex:1];
+	[self insertSpecifier:[self createNameSpecifier] atIndex:1];
+	[self insertSpecifier:[self createGlyphSpecifier] atIndex:3];
 
 	[self setTitle:title];
 	[self.navigationItem setTitle:title];
@@ -47,7 +49,7 @@
 	return false;
 }
 
-- (PSSpecifier *)createSpecifier {
+- (PSSpecifier *)createNameSpecifier {
 
 	PSSpecifier *toggleSpecifier = [PSSpecifier preferenceSpecifierNamed:@""
 	target:self
@@ -61,21 +63,55 @@
 }
 
 - (void)setName:(NSString *)name {
+
 	[self.toggleSpecifier setName:name];
 	self.toggleInfo = [self getToggle:self.toggleSpecifier];
 	[self updateToggle:self.toggleSpecifier];
 }
 
 - (NSString *)getName {
+
     return [self.toggleSpecifier name];
+}
+
+- (PSSpecifier *)createGlyphSpecifier {
+
+	PSSpecifier* specifier = [PSSpecifier preferenceSpecifierNamed:@"Choose a glyph"
+	target:self
+	set:@selector(setGlyph:)
+	get:@selector(getGlyph)
+	detail:NSClassFromString(@"PSListItemsController")
+	cell:PSLinkListCell
+	edit:Nil];
+
+	specifier.values = [NSArray arrayWithObjects:DICT_GLYPH_VALUES nil];
+	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:DICT_GLYPH_VALUES nil] forKeys:specifier.values];
+	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:DICT_GLYPH_VALUES nil] forKeys:specifier.values];
+
+	[specifier setProperty:@"Glyph are located in 'Library/ControlCenter/Bundles/Coeus.bundles'" forKey:@"staticTextMessage"];
+
+	return specifier;
+}
+
+- (void)setGlyph:(NSString *)glyph {
+
+	[self.toggleSpecifier setProperty:glyph forKey:@"Glyph"];
+	self.toggleInfo = [self getToggle:self.toggleSpecifier];
+	[self updateToggle:self.toggleSpecifier];
+}
+
+- (NSString *)getGlyph {
+
+	return [self.toggleSpecifier propertyForKey:@"Glyph"];
 }
 
 - (NSMutableArray *)getToggle:(PSSpecifier *)specifier {
 
 	NSString *name = [specifier name];
 	NSNumber *index = [specifier propertyForKey:@"Index"];
+	NSString *glyph = [specifier propertyForKey:@"Glyph"];
 
-	return [[NSMutableArray alloc] initWithObjects:name, index, nil];
+	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, nil];
 }
 
 - (void)updateToggle:(PSSpecifier *)specifier {

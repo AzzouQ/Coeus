@@ -23,7 +23,7 @@
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
 	for (NSArray *toggle in toggleList) {
-		[self addSpecifier:[self createSpecifier:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1]]];
+		[self addSpecifier:[self createToggleSpecifier:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1] glyph:[toggle objectAtIndex:2]]];
 	}
 
 	[self setTitle:title];
@@ -41,7 +41,7 @@
 	return false;
 }
 
-- (PSSpecifier *)createSpecifier:(NSString *)name index:(NSNumber *)index {
+- (PSSpecifier *)createToggleSpecifier:(NSString *)name index:(NSNumber *)index glyph:(NSString *)glyph {
 
 	PSSpecifier *toggleSpecifier = [PSSpecifier preferenceSpecifierNamed:name
 	target:self
@@ -53,6 +53,7 @@
 
 	[toggleSpecifier setProperty:@"Toggle" forKey:@"CoeusSub"];
 	[toggleSpecifier setProperty:index forKey:@"Index"];
+	[toggleSpecifier setProperty:glyph forKey:@"Glyph"];
 	[toggleSpecifier setButtonAction:@selector(setToggleController:)];
 	[toggleSpecifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
@@ -69,7 +70,7 @@
 	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		PSSpecifier *toggleSpecifier = [self createSpecifier:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]]];
+		PSSpecifier *toggleSpecifier = [self createToggleSpecifier:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]] glyph:@"Switch"];
 		[self saveToggle:toggleSpecifier];
 		[self addSpecifier:toggleSpecifier];
 		[self reload];
@@ -85,8 +86,9 @@
 
 	NSString *name = [specifier name];
 	NSNumber *index = [specifier propertyForKey:@"Index"];
+	NSString *glyph = [specifier propertyForKey:@"Glyph"];
 
-	return [[NSMutableArray alloc] initWithObjects:name, index, nil];
+	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, nil];
 }
 
 - (void)saveToggle:(PSSpecifier *)specifier {

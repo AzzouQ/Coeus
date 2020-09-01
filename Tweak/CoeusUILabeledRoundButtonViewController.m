@@ -4,12 +4,11 @@
 
 - (instancetype)initWithToggle:(NSArray *)toggle {
 
-	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:@"AirDrop" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
+	if (!(self = [super initWithGlyphImage:[UIImage imageNamed:[toggle objectAtIndex:2] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;
 	}
 
 	if ((self.event = [[CoeusLAEvent alloc] initWithToggle:toggle])) {
-
 		self.LAEvent = [LAEvent eventWithName:self.event.eventIdentifier mode:[LASharedActivator currentEventMode]];
 		self.listenerName = [LASharedActivator assignedListenerNameForEvent:self.LAEvent];
 	}

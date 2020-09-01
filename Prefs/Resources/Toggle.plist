@@ -20,15 +20,23 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Glyph</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Activator</string>
 			<key>footerText</key>
-			<string>This setting will allow the toggle to be tapped anywhere. For more control over this behavior, use Activator's preferences</string>
+			<string>This setting will allow the toggle to be tapped anywhere.
+For more control over this behavior, use Activator's preferences</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Activator Action</string>
+			<string>Activator Actions</string>
 			<key>action</key>
 			<string>setActivatorAction</string>
 		</dict>
