@@ -41,7 +41,7 @@
 			<key>label</key>
 			<string>Activator</string>
 			<key>footerText</key>
-			<string>This setting will allow the toggle to be tapped anywhere.
+			<string>This setting will allow the toggle to be tapped anywhere
 For more control over this behavior, use Activator's preferences</string>
 		</dict>
 		<dict>
