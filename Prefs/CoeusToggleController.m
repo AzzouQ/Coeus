@@ -98,6 +98,21 @@
 	return specifier;
 }
 
+- (NSArray *)getToggleGlyphList {
+
+	NSArray *bundleDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Library/ControlCenter/Bundles/Coeus.bundle/" error:NULL];
+
+	NSMutableArray *toggleGlyphList = [[NSMutableArray alloc] init];
+	[bundleDirectory enumerateObjectsUsingBlock:^(id file, NSUInteger index, BOOL *stop) {
+		NSString *filename = (NSString *)file;
+		if (([filename containsString:@"@2x.png"]) && !([filename containsString:@"SettingsIcon"])) {
+			[toggleGlyphList addObject:[filename stringByReplacingOccurrencesOfString:@"@2x.png" withString:@""]];
+		}
+	}];
+
+	return toggleGlyphList;
+}
+
 - (PSSpecifier *)createSwitchSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Use SF Symbols"
@@ -148,21 +163,6 @@
 - (NSString *)getGlyph {
 
 	return [self.toggleSpecifier propertyForKey:@"Glyph"];
-}
-
-- (NSArray *)getToggleGlyphList {
-
-	NSArray *bundleDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Library/ControlCenter/Bundles/Coeus.bundle/" error:NULL];
-
-	NSMutableArray *toggleGlyphList = [[NSMutableArray alloc] init];
-	[bundleDirectory enumerateObjectsUsingBlock:^(id file, NSUInteger index, BOOL *stop) {
-		NSString *filename = (NSString *)file;
-		if (([filename containsString:@"@2x.png"]) && !([filename containsString:@"SettingsIcon"])) {
-			[toggleGlyphList addObject:[filename stringByReplacingOccurrencesOfString:@"@2x.png" withString:@""]];
-		}
-	}];
-
-	return toggleGlyphList;
 }
 
 - (NSMutableArray *)getToggle {
