@@ -23,7 +23,7 @@
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
 	for (NSArray *toggle in toggleList) {
-		[self addSpecifier:[self createToggleSpecifier:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1] glyph:[toggle objectAtIndex:2]]];
+		[self addSpecifier:[self createToggleSpecifier:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1] glyph:[toggle objectAtIndex:2] sfSymbols:[toggle objectAtIndex:3]]];
 	}
 
 	[self setTitle:title];
@@ -41,19 +41,20 @@
 	return false;
 }
 
-- (PSSpecifier *)createToggleSpecifier:(NSString *)name index:(NSNumber *)index glyph:(NSString *)glyph {
+- (PSSpecifier *)createToggleSpecifier:(NSString *)name index:(NSNumber *)index glyph:(NSString *)glyph sfSymbols:(NSNumber *)sfSymbols {
 
 	PSSpecifier *toggleSpecifier = [PSSpecifier preferenceSpecifierNamed:name
 	target:self
 	set:NULL
 	get:NULL
-	detail:[CoeusToggleController class]
+	detail:NSClassFromString(@"CoeusToggleController")
 	cell:PSLinkCell
 	edit:Nil];
 
 	[toggleSpecifier setProperty:@"Toggle" forKey:@"CoeusSub"];
 	[toggleSpecifier setProperty:index forKey:@"Index"];
 	[toggleSpecifier setProperty:glyph forKey:@"Glyph"];
+	[toggleSpecifier setProperty:sfSymbols forKey:@"SFSymbols"];
 	[toggleSpecifier setButtonAction:@selector(setToggleController:)];
 	[toggleSpecifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
@@ -72,7 +73,7 @@
 	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		PSSpecifier *toggleSpecifier = [self createToggleSpecifier:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]] glyph:@"Switch"];
+		PSSpecifier *toggleSpecifier = [self createToggleSpecifier:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]] glyph:@"Switch" sfSymbols:[NSNumber numberWithBool:NO]];
 		[self saveToggle:toggleSpecifier];
 		[self addSpecifier:toggleSpecifier];
 		[self reload];
@@ -89,8 +90,9 @@
 	NSString *name = [specifier name];
 	NSNumber *index = [specifier propertyForKey:@"Index"];
 	NSString *glyph = [specifier propertyForKey:@"Glyph"];
+	NSNumber *sfSymbols = [specifier propertyForKey:@"SFSymbols"];
 
-	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, nil];
+	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, sfSymbols, nil];
 }
 
 - (void)saveToggle:(PSSpecifier *)specifier {

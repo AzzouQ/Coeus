@@ -4,11 +4,10 @@
 
 - (instancetype)initWithToggle:(NSArray *)toggle {
 
-	// UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithScale:3];
-	// // config._weight = 7;
-	// [config setWeight:7];
-	// UIImage *image = [UIImage systemImageNamed:@"personalhotspot" withConfiguration:config];
-	UIImage *image = [UIImage imageNamed:[toggle objectAtIndex:2] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
+	UIImage *image = (([[toggle objectAtIndex:3] boolValue])
+	? [UIImage systemImageNamed:[toggle objectAtIndex:2] withConfiguration:[UIImageSymbolConfiguration configurationWithScale:3]]
+	: [UIImage imageNamed:[toggle objectAtIndex:2] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
+
 	if (!(self = [super initWithGlyphImage:image highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;
 	}

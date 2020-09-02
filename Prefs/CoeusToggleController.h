@@ -2,7 +2,7 @@
 
 #import "CoeusRootListController.h"
 
-@interface CoeusToggleController : PSListController
+@interface CoeusToggleController : HBListController
 
 @property (nonatomic, assign) PSSpecifier *toggleSpecifier;
 
