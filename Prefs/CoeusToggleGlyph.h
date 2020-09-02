@@ -24,6 +24,7 @@
 							@"HomeButton",\
 							@"Instagram",\
 							@"Link",\
+							@"Location",\
 							@"Maps",\
 							@"Menu",\
 							@"Message",\
@@ -31,8 +32,9 @@
 							@"Moon",\
 							@"More",\
 							@"Music",\
-							@"MusicSimple",\
+							@"MusicNote",\
 							@"Netflix",\
+							@"OrientationLock",\
 							@"PayPal",\
 							@"Phone",\
 							@"Photo",\

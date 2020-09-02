@@ -62,6 +62,8 @@
 
 - (void)addToggle {
 
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+
 	UIAlertController *addAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle"
 	message:@"Choose a name for your toggle"
 	preferredStyle:UIAlertControllerStyleAlert];

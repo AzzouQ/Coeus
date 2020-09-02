@@ -5,7 +5,6 @@
 @interface CoeusToggleController : PSListController
 
 @property (nonatomic, assign) PSSpecifier *toggleSpecifier;
-@property (nonatomic, retain) NSMutableArray *toggleInfo;
 
 - (id)initWithSpecifier:(PSSpecifier *)specifier;
 

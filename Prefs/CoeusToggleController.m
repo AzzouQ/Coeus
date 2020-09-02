@@ -13,7 +13,6 @@
 	self.navigationItem.rightBarButtonItem = addButton;
 
 	self.toggleSpecifier = specifier;
-	self.toggleInfo = [self getToggle:specifier];
 
 	[self setSpecifier:specifier];
 	return self;
@@ -65,8 +64,6 @@
 - (void)setName:(NSString *)name {
 
 	[self.toggleSpecifier setName:name];
-	self.toggleInfo = [self getToggle:self.toggleSpecifier];
-	[self updateToggle:self.toggleSpecifier];
 }
 
 - (NSString *)getName {
@@ -96,8 +93,6 @@
 - (void)setGlyph:(NSString *)glyph {
 
 	[self.toggleSpecifier setProperty:glyph forKey:@"Glyph"];
-	self.toggleInfo = [self getToggle:self.toggleSpecifier];
-	[self updateToggle:self.toggleSpecifier];
 }
 
 - (NSString *)getGlyph {
@@ -105,21 +100,21 @@
 	return [self.toggleSpecifier propertyForKey:@"Glyph"];
 }
 
-- (NSMutableArray *)getToggle:(PSSpecifier *)specifier {
+- (NSMutableArray *)getToggle:(PSSpecifier *)toggleSpecifier {
 
-	NSString *name = [specifier name];
-	NSNumber *index = [specifier propertyForKey:@"Index"];
-	NSString *glyph = [specifier propertyForKey:@"Glyph"];
+	NSString *name = [toggleSpecifier name];
+	NSNumber *index = [toggleSpecifier propertyForKey:@"Index"];
+	NSString *glyph = [toggleSpecifier propertyForKey:@"Glyph"];
 
 	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, nil];
 }
 
-- (void)updateToggle:(PSSpecifier *)specifier {
+- (void)updateToggle {
 
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	[toggleList replaceObjectAtIndex:[[self.toggleInfo objectAtIndex:1] integerValue] withObject:self.toggleInfo];
+	[toggleList replaceObjectAtIndex:[[self.toggleSpecifier propertyForKey:@"Index"] integerValue] withObject:[self getToggle:self.toggleSpecifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 	[self reload];
@@ -127,12 +122,13 @@
 
 - (void)saveToggle {
 
+	[self updateToggle];
 	[[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)setActivatorAction {
 
-	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[NSString stringWithFormat:@"com.azzou.coeus.toggle%@", [self.toggleInfo objectAtIndex:1]]];
+	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[NSString stringWithFormat:@"com.azzou.coeus.toggle%@", [self.toggleSpecifier propertyForKey:@"Index"]]];
 	[[self navigationController] pushViewController:vc animated:YES];
 }
 
