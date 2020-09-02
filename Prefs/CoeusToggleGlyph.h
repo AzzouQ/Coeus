@@ -5,6 +5,7 @@
 							@"Apple",\
 							@"ApplePay",\
 							@"Arcade",\
+							@"Bell",\
 							@"Bluetooth",\
 							@"Book",\
 							@"Brave",\
@@ -34,7 +35,7 @@
 							@"Music",\
 							@"MusicNote",\
 							@"Netflix",\
-							@"OrientationLock",\
+							@"Orientation",\
 							@"PayPal",\
 							@"Phone",\
 							@"Photo",\
