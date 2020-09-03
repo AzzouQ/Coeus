@@ -43,7 +43,7 @@
 
 - (PSSpecifier *)createToggleSpecifier:(NSString *)name index:(NSNumber *)index glyph:(NSString *)glyph sfSymbols:(NSNumber *)sfSymbols {
 
-	PSSpecifier *toggleSpecifier = [PSSpecifier preferenceSpecifierNamed:name
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name
 	target:self
 	set:NULL
 	get:NULL
@@ -51,14 +51,14 @@
 	cell:PSLinkCell
 	edit:Nil];
 
-	[toggleSpecifier setProperty:@"Toggle" forKey:@"CoeusSub"];
-	[toggleSpecifier setProperty:index forKey:@"Index"];
-	[toggleSpecifier setProperty:glyph forKey:@"Glyph"];
-	[toggleSpecifier setProperty:sfSymbols forKey:@"SFSymbols"];
-	[toggleSpecifier setButtonAction:@selector(setToggleController:)];
-	[toggleSpecifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
+	[specifier setProperty:@"Toggle" forKey:@"CoeusSub"];
+	[specifier setProperty:index forKey:@"Index"];
+	[specifier setProperty:glyph forKey:@"Glyph"];
+	[specifier setProperty:sfSymbols forKey:@"SFSymbols"];
+	[specifier setButtonAction:@selector(setToggleController:)];
+	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
-	return toggleSpecifier;
+	return specifier;
 }
 
 - (void)addToggle {
@@ -120,7 +120,7 @@
 
 - (void)setToggleController:(PSSpecifier *)specifier {
 	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier];
-	[[self navigationController] pushViewController:toggleController animated:YES];
+	[self.navigationController pushViewController:toggleController animated:YES];
 }
 
 @end

@@ -188,14 +188,15 @@
 
 - (void)saveToggle {
 
+	[self.view endEditing:YES];
 	[self updateToggle];
-	[[self navigationController] popViewControllerAnimated:YES];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)setActivatorAction {
 
 	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[NSString stringWithFormat:@"com.azzou.coeus.toggle%@", [self.toggleSpecifier propertyForKey:@"Index"]]];
-	[[self navigationController] pushViewController:vc animated:YES];
+	[self.navigationController pushViewController:vc animated:YES];
 }
 
 
