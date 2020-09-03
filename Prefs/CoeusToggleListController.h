@@ -6,7 +6,7 @@
 
 @interface CoeusToggleListController : PSEditableListController
 
-- (PSSpecifier *)createToggleSpecifier:(NSString *)name index:(NSNumber *)index glyph:(NSString *)glyph sfSymbols:(NSNumber *)sfSymbols;
+- (PSSpecifier *)createSpecifierFromToggle:(NSString *)name index:(NSNumber *)index glyphName:(NSString *)glyphName isSFSymbols:(NSNumber *)isSFSymbols sfSymbolsSize:(NSNumber *)sfSymbolsSize sfSymbolsWeight:(NSNumber *)sfSymbolsWeight sfSymbolsScale:(NSNumber *)sfSymbolsScale;
 - (void)addToggle;
 - (void)saveToggle:(PSSpecifier *)spec;
 

@@ -14,6 +14,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Module Size</string>
+			<key>footerText</key>
+			<string>Respring is required to take effect.</string>
 		</dict>
 		<dict>
 			<key>cell</key>

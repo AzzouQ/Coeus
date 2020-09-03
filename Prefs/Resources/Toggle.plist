@@ -22,7 +22,7 @@
 			<key>label</key>
 			<string>Glyph</string>
 			<key>footerText</key>
-			<string>Be carreful with SF Symbols names typo as entering a wrong name may lead to safe mode</string>
+			<string>If 'Name' contain typos, a basic 'Switch' glyph will be displayed.</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -39,16 +39,16 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Activator</string>
+			<string>Action</string>
 			<key>footerText</key>
-			<string>This setting will allow the toggle to be tapped anywhere
-For more control over this behavior, use Activator's preferences</string>
+			<string>This setting will allow the toggle to be tapped anywhere.
+For more control over this behavior, use Activator's preferences.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Activator Actions</string>
+			<string>Activator</string>
 			<key>action</key>
 			<string>setActivatorAction</string>
 		</dict>

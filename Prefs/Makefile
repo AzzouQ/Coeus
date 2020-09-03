@@ -1,15 +1,15 @@
 ARCHS = arm64 arm64e
-TARGET := iphone:clang:11.2
+TARGET := iphone:clang:13.4
 
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = CoeusPrefs
 $(BUNDLE_NAME)_FILES = $(wildcard *.m)
-$(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles
 $(BUNDLE_NAME)_LIBRARIES += activator
 $(BUNDLE_NAME)_FRAMEWORKS = UIKit
 $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
 $(BUNDLE_NAME)_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
+$(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles/
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

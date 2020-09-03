@@ -1,5 +1,4 @@
 #import "CoeusToggleController.h"
-#import "CoeusToggleGlyph.h"
 
 @implementation CoeusToggleController
 
@@ -30,12 +29,16 @@
 
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
-	[self insertSpecifier:[self createNameSpecifier] atIndex:1];
-	[self insertSpecifier:[self createGlyphSpecifier] atIndex:3];
+	[self insertSpecifier:[self createToggleNameSpecifier] atIndex:1];
+	[self insertSpecifier:[self createGlyphListSpecifier] atIndex:3];
 	if (@available(iOS 13.0, *)) {
-		[self insertSpecifier:[self createSwitchSpecifier] atIndex:4];
-		if ([[self.toggleSpecifier propertyForKey:@"SFSymbols"] boolValue]) {
-			[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:5];
+		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:4];
+		if ([[self.toggleSpecifier propertyForKey:@"isSFSymbols"] boolValue]) {
+			[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
+			[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:5];
+			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6];
+			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7];
+			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8];
 		}
 	}
 
@@ -54,15 +57,9 @@
 	return false;
 }
 
-- (PSSpecifier *)createNameSpecifier {
+- (PSSpecifier *)createToggleNameSpecifier {
 
-	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@""
-	target:self
-	set:@selector(setName:)
-	get:@selector(getName)
-	detail:Nil
-	cell:PSEditTextCell
-	edit:Nil];
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"" target:self set:@selector(setName:) get:@selector(getName) detail:Nil cell:PSEditTextCell edit:Nil];
 
 	return specifier;
 }
@@ -77,28 +74,31 @@
 	return [self.toggleSpecifier name];
 }
 
-- (PSSpecifier *)createGlyphSpecifier {
+- (PSSpecifier *)createGlyphListSpecifier {
 
-	PSSpecifier* specifier = [PSSpecifier preferenceSpecifierNamed:@"Choose from preset"
-	target:self
-	set:@selector(setGlyph:)
-	get:@selector(getGlyph)
-	detail:NSClassFromString(@"PSListItemsController")
-	cell:PSLinkListCell
-	edit:Nil];
-
-	NSArray *toggleGlyphList = [self getToggleGlyphList];
-
-	specifier.values = toggleGlyphList;
-	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:toggleGlyphList forKeys:specifier.values];
-	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:toggleGlyphList forKeys:specifier.values];
+	NSArray *glyphList = [self getGlyphList];
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Choose from preset" target:self set:@selector(setGlyph:) get:@selector(getGlyph) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
 
 	[specifier setProperty:@"Glyph are located in '/Library/ControlCenter/Bundles/Coeus.bundle'" forKey:@"staticTextMessage"];
+
+	specifier.values = glyphList;
+	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:glyphList forKeys:specifier.values];
+	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:glyphList forKeys:specifier.values];
 
 	return specifier;
 }
 
-- (NSArray *)getToggleGlyphList {
+- (void)setGlyph:(NSString *)glyph {
+
+	[self.toggleSpecifier setProperty:glyph forKey:@"glyphName"];
+}
+
+- (NSString *)getGlyph {
+
+	return [self.toggleSpecifier propertyForKey:@"glyphName"];
+}
+
+- (NSArray *)getGlyphList {
 
 	NSArray *bundleDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Library/ControlCenter/Bundles/Coeus.bundle/" error:NULL];
 
@@ -113,66 +113,157 @@
 	return toggleGlyphList;
 }
 
-- (PSSpecifier *)createSwitchSpecifier {
+- (PSSpecifier *)createSFSymbolsSpecifier {
 
-	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Use SF Symbols"
-	target:self
-	set:@selector(setSwitch:)
-	get:@selector(getSwitch)
-	detail:Nil
-	cell:PSSwitchCell
-	edit:Nil];
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Use SF Symbols" target:self set:@selector(setSFSymbols:) get:@selector(isSFSymbols) detail:Nil cell:PSSwitchCell edit:Nil];
 
 	return specifier;
 }
 
-- (void)setSwitch:(NSNumber *)sfSymbols {
+- (void)setSFSymbols:(NSNumber *)sfSymbols {
 
 	if ([sfSymbols boolValue]) {
-		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:5 animated:YES];
+		[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
+		[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:5 animated:YES];
+		[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6 animated:YES];
+		[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7 animated:YES];
+		[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8 animated:YES];
 	} else {
+		[[self specifierAtIndex:3] setProperty:@YES forKey:@"enabled"];
+		[self removeSpecifierAtIndex:5 animated:YES];
+		[self removeSpecifierAtIndex:5 animated:YES];
+		[self removeSpecifierAtIndex:5 animated:YES];
 		[self removeSpecifierAtIndex:5 animated:YES];
 	}
 
-	[self.toggleSpecifier setProperty:sfSymbols forKey:@"SFSymbols"];
+	[self reloadSpecifierAtIndex:3 animated:YES];
+	[self.toggleSpecifier setProperty:sfSymbols forKey:@"isSFSymbols"];
 }
 
-- (NSNumber *)getSwitch {
+- (NSNumber *)isSFSymbols {
 
-	return [self.toggleSpecifier propertyForKey:@"SFSymbols"];
+	return [self.toggleSpecifier propertyForKey:@"isSFSymbols"];
 }
 
-- (PSSpecifier *)createSFSymbolsSpecifier {
+- (PSSpecifier *)createSFSymbolsWeightSpecifier {
 
-	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@""
-	target:self
-	set:@selector(setGlyph:)
-	get:@selector(getGlyph)
-	detail:Nil
-	cell:PSEditTextCell
-	edit:Nil];
+	NSArray *sfSymbolsWeightValueList = [[NSMutableArray alloc] initWithObjects:
+	[NSNumber numberWithInteger:UIImageSymbolWeightUltraLight],
+	[NSNumber numberWithInteger:UIImageSymbolWeightThin],
+	[NSNumber numberWithInteger:UIImageSymbolWeightLight],
+	[NSNumber numberWithInteger:UIImageSymbolWeightRegular],
+	[NSNumber numberWithInteger:UIImageSymbolWeightMedium],
+	[NSNumber numberWithInteger:UIImageSymbolWeightSemibold],
+	[NSNumber numberWithInteger:UIImageSymbolWeightBold],
+	[NSNumber numberWithInteger:UIImageSymbolWeightHeavy],
+	[NSNumber numberWithInteger:UIImageSymbolWeightBlack],
+	nil];
+
+	NSArray *sfSymbolsWeightNameList = [[NSMutableArray alloc] initWithObjects:
+	@"Ultra Light",
+	@"Thin",
+	@"Light",
+	@"Regular",
+	@"Medium",
+	@"Semibold",
+	@"Bold",
+	@"Heavy",
+	@"Black",
+	nil];
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Weight" target:self set:@selector(setWeight:) get:@selector(getWeight) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
+
+	specifier.values = sfSymbolsWeightValueList;
+	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsWeightNameList forKeys:specifier.values];
+	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsWeightNameList forKeys:specifier.values];
 
 	return specifier;
 }
 
-- (void)setGlyph:(NSString *)glyph {
+- (PSSpecifier *)createSFSymbolsSizeSpecifier {
 
-	[self.toggleSpecifier setProperty:glyph forKey:@"Glyph"];
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Size" target:self set:@selector(setSize:) get:@selector(getSize) detail:Nil cell:PSSliderCell edit:Nil];
+
+	[specifier setProperty:[UIImage imageNamed:@"Size" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] forKey:@"leftImage"];
+	[specifier setProperty:[NSNumber numberWithFloat:20.0] forKey:@"default"];
+	[specifier setProperty:[NSNumber numberWithFloat:15.0] forKey:@"min"];
+	[specifier setProperty:[NSNumber numberWithFloat:25.0] forKey:@"max"];
+	[specifier setProperty:@YES forKey:@"showValue"];
+
+	return specifier;
 }
 
-- (NSString *)getGlyph {
+- (void)setSize:(NSNumber *)size {
 
-	return [self.toggleSpecifier propertyForKey:@"Glyph"];
+	[self.toggleSpecifier setProperty:size forKey:@"sfSymbolsSize"];
 }
 
-- (NSMutableArray *)getToggle {
+- (NSString *)getSize {
+
+	return [self.toggleSpecifier propertyForKey:@"sfSymbolsSize"];
+}
+
+- (void)setWeight:(NSNumber *)size {
+
+	[self.toggleSpecifier setProperty:size forKey:@"sfSymbolsWeight"];
+}
+
+- (NSNumber *)getWeight {
+
+	return [self.toggleSpecifier propertyForKey:@"sfSymbolsWeight"];
+}
+
+- (PSSpecifier *)createSFSymbolsScaleSpecifier {
+
+	NSArray *sfSymbolsScaleValueList = [[NSMutableArray alloc] initWithObjects:
+	[NSNumber numberWithInteger:UIImageSymbolScaleSmall],
+	[NSNumber numberWithInteger:UIImageSymbolScaleMedium],
+	[NSNumber numberWithInteger:UIImageSymbolScaleLarge],
+	nil];
+
+	NSArray *sfSymbolsScaleNameList = [[NSMutableArray alloc] initWithObjects:
+	@"Small",
+	@"Medium",
+	@"Large",
+	nil];
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Scale" target:self set:@selector(setScale:) get:@selector(getScale) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
+
+	specifier.values = sfSymbolsScaleValueList;
+	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsScaleNameList forKeys:specifier.values];
+	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsScaleNameList forKeys:specifier.values];
+
+	return specifier;
+}
+
+- (void)setScale:(NSNumber *)size {
+
+	[self.toggleSpecifier setProperty:size forKey:@"sfSymbolsScale"];
+}
+
+- (NSNumber *)getScale {
+
+	return [self.toggleSpecifier propertyForKey:@"sfSymbolsScale"];
+}
+
+- (PSSpecifier *)createSFSymbolsNameSpecifier {
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Name" target:self set:@selector(setGlyph:) get:@selector(getGlyph) detail:Nil cell:PSEditTextCell edit:Nil];
+
+	return specifier;
+}
+
+- (NSMutableArray *)getToggleFromSpecifier {
 
 	NSString *name = [self.toggleSpecifier name];
-	NSNumber *index = [self.toggleSpecifier propertyForKey:@"Index"];
-	NSString *glyph = [self.toggleSpecifier propertyForKey:@"Glyph"];
-	NSNumber *sfSymbols = [self.toggleSpecifier propertyForKey:@"SFSymbols"];
+	NSNumber *index = [self.toggleSpecifier propertyForKey:@"index"];
+	NSString *glyphName = [self.toggleSpecifier propertyForKey:@"glyphName"];
+	NSNumber *isSFSymbols = [self.toggleSpecifier propertyForKey:@"isSFSymbols"];
+	NSNumber *sfSymbolsSize = [self.toggleSpecifier propertyForKey:@"sfSymbolsSize"];
+	NSNumber *sfSymbolsWeight = [self.toggleSpecifier propertyForKey:@"sfSymbolsWeight"];
+	NSNumber *sfSymbolsScale = [self.toggleSpecifier propertyForKey:@"sfSymbolsScale"];
 
-	return [[NSMutableArray alloc] initWithObjects:name, index, glyph, sfSymbols, nil];
+	return [[NSMutableArray alloc] initWithObjects:name, index, glyphName, isSFSymbols, sfSymbolsSize, sfSymbolsWeight, sfSymbolsScale,nil];
 }
 
 - (void)updateToggle {
@@ -180,7 +271,7 @@
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	[toggleList replaceObjectAtIndex:[[self.toggleSpecifier propertyForKey:@"Index"] integerValue] withObject:[self getToggle]];
+	[toggleList replaceObjectAtIndex:[[self.toggleSpecifier propertyForKey:@"index"] integerValue] withObject:[self getToggleFromSpecifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 	[self reload];
@@ -198,6 +289,5 @@
 	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[NSString stringWithFormat:@"com.azzou.coeus.toggle%@", [self.toggleSpecifier propertyForKey:@"Index"]]];
 	[self.navigationController pushViewController:vc animated:YES];
 }
-
 
 @end

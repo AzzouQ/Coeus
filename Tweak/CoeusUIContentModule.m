@@ -1,4 +1,3 @@
-#import "CoeusPreferences.h"
 #import "CoeusUIContentModule.h"
 
 @implementation CoeusUIContentModule

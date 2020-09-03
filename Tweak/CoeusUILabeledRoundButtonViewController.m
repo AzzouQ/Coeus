@@ -5,8 +5,10 @@
 - (instancetype)initWithToggle:(NSArray *)toggle {
 
 	UIImage *image = (([[toggle objectAtIndex:3] boolValue])
-	? [UIImage systemImageNamed:[toggle objectAtIndex:2] withConfiguration:[UIImageSymbolConfiguration configurationWithScale:3]]
+	? [UIImage systemImageNamed:[toggle objectAtIndex:2] withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:[[toggle objectAtIndex:4] floatValue] weight:[[toggle objectAtIndex:5] integerValue] scale:[[toggle objectAtIndex:6] integerValue]]]
 	: [UIImage imageNamed:[toggle objectAtIndex:2] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
+
+	if (!(image)) image = [UIImage imageNamed:@"Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
 
 	if (!(self = [super initWithGlyphImage:image highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;

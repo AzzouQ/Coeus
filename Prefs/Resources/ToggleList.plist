@@ -15,7 +15,7 @@
 			<key>label</key>
 			<string>Manage Toggle</string>
 			<key>footerText</key>
-			<string>Respring is required to see toggles in Activator</string>
+			<string>Respring is required to take effect.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
