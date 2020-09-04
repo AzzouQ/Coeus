@@ -4,13 +4,6 @@
 
 @implementation CoeusToggleListController
 
-- (void)viewWillAppear:(BOOL)animated {
-
-	[super viewWillAppear:animated];
-
-	[self reload];
-}
-
 - (void)setSpecifier:(PSSpecifier *)specifier {
 
 	[self loadSpecifier:specifier];
