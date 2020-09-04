@@ -25,18 +25,6 @@
 	return self;
 }
 
-- (void)buttonTapped:(id)arg1 {
-
-	[LASharedActivator sendEventToListener:self.LAEvent];
-
-	if (self.LAEvent.handled) {
-		if ([self.listenerName containsString:@"switch-"]) {
-  			[super buttonTapped:arg1];
-			[super setSubtitle:([self.subtitle isEqualToString:@"Enabled"] ? @"Disabled" : @"Enabled")];
-		}
-    }
-}
-
 - (void)viewDidLoad {
 
 	FSSwitchPanel *fsp = [FSSwitchPanel sharedPanel];
@@ -55,6 +43,18 @@
 			[super setSubtitle:@"Disabled"];
 		}
 	}
+}
+
+- (void)buttonTapped:(id)arg1 {
+
+	[LASharedActivator sendEventToListener:self.LAEvent];
+
+	if (self.LAEvent.handled) {
+		if ([self.listenerName containsString:@"switch-"]) {
+  			[super buttonTapped:arg1];
+			[super setSubtitle:([self.subtitle isEqualToString:@"Enabled"] ? @"Disabled" : @"Enabled")];
+		}
+    }
 }
 
 - (BOOL)_canShowWhileLocked {

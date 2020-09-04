@@ -2,7 +2,9 @@
 
 @implementation CoeusToggleController
 
-- (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggle:(NSMutableDictionary *)toggle {
+- (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggleIndex:(NSInteger)toggleIndex {
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 
 	if (!(self = [super init])) {
 		return self;
@@ -10,7 +12,8 @@
 
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(updateToggle)];
 	self.specifier = specifier;
-	self.toggle = toggle;
+	self.toggleIndex = toggleIndex;
+	self.toggleDict = [[prefs objectForKey:@"toggleList"][self.toggleIndex] mutableCopy];
 
 	[self setSpecifier:specifier];
 
@@ -42,7 +45,7 @@
 	[self insertSpecifier:[self createGlyphListSpecifier] atIndex:3];
 	if (@available(iOS 13.0, *)) {
 		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:4];
-		if ([[self.toggle objectForKey:@"isSFSymbols"] boolValue]) {
+		if ([[self.toggleDict objectForKey:@"isSFSymbols"] boolValue]) {
 			[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
 			[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:5];
 			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6];
@@ -58,7 +61,6 @@
 
 	return specifier;
 }
-
 
 - (PSSpecifier *)createGlyphListSpecifier {
 
@@ -176,42 +178,41 @@
 
 - (void)updateToggle {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
 	[self.view endEditing:YES];
 
-	[toggleList replaceObjectAtIndex:[[self.toggle objectForKey:@"index"] integerValue] withObject:self.toggle];
+	[toggleList replaceObjectAtIndex:self.toggleIndex withObject:self.toggleDict];
 	[prefs setObject:toggleList forKey:@"toggleList"];
-	[self.specifier setName:[self.toggle objectForKey:@"name"]];
+	[self.specifier setName:[self.toggleDict objectForKey:@"name"]];
 
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)setActivatorAction {
 
-	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[self.toggle objectForKey:@"eventIdentifier"]];
+	LAEventSettingsController *vc = [[LAEventSettingsController alloc] initWithModes:[NSArray arrayWithObjects:@"springboard", @"lockscreen", @"application", nil] eventName:[self.toggleDict objectForKey:@"eventIdentifier"]];
 	[self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)setName:(NSString *)name {
 
-	[self.toggle setObject:name forKey:@"name"];
+	[self.toggleDict setObject:name forKey:@"name"];
 }
 
 - (NSString *)getName {
 
-	return [self.toggle objectForKey:@"name"];
+	return [self.toggleDict objectForKey:@"name"];
 }
 
 - (void)setGlyphName:(NSString *)glyphName {
 
-	[self.toggle setObject:glyphName forKey:@"glyphName"];
+	[self.toggleDict setObject:glyphName forKey:@"glyphName"];
 }
 
 - (NSString *)getGlyphName {
 
-	return [self.toggle objectForKey:@"glyphName"];
+	return [self.toggleDict objectForKey:@"glyphName"];
 }
 
 - (void)setSFSymbols:(NSNumber *)isSFSymbols {
@@ -232,42 +233,42 @@
 
 	[self reloadSpecifierAtIndex:3 animated:YES];
 
-	[self.toggle setObject:isSFSymbols forKey:@"isSFSymbols"];
+	[self.toggleDict setObject:isSFSymbols forKey:@"isSFSymbols"];
 }
 
 - (NSNumber *)isSFSymbols {
 
-	return [self.toggle objectForKey:@"isSFSymbols"];
+	return [self.toggleDict objectForKey:@"isSFSymbols"];
 }
 
 - (void)setSFSymbolsSize:(NSNumber *)sfSymbolsSize {
 
-	[self.toggle setObject:sfSymbolsSize forKey:@"sfSymbolsSize"];
+	[self.toggleDict setObject:sfSymbolsSize forKey:@"sfSymbolsSize"];
 }
 
 - (NSString *)getSFSymbolsSize {
 
-	return [self.toggle objectForKey:@"sfSymbolsSize"];
+	return [self.toggleDict objectForKey:@"sfSymbolsSize"];
 }
 
 - (void)setSFSymbolsWeight:(NSNumber *)sfSymbolsWeight {
 
-	[self.toggle setObject:sfSymbolsWeight forKey:@"sfSymbolsWeight"];
+	[self.toggleDict setObject:sfSymbolsWeight forKey:@"sfSymbolsWeight"];
 }
 
 - (NSNumber *)getSFSymbolsWeight {
 
-	return [self.toggle objectForKey:@"sfSymbolsWeight"];
+	return [self.toggleDict objectForKey:@"sfSymbolsWeight"];
 }
 
 - (void)setSFSymbolsScale:(NSNumber *)sfSymbolsScale {
 
-	[self.toggle setObject:sfSymbolsScale forKey:@"sfSymbolsScale"];
+	[self.toggleDict setObject:sfSymbolsScale forKey:@"sfSymbolsScale"];
 }
 
 - (NSNumber *)getSFSymbolsScale {
 
-	return [self.toggle objectForKey:@"sfSymbolsScale"];
+	return [self.toggleDict objectForKey:@"sfSymbolsScale"];
 }
 
 

@@ -22,7 +22,7 @@
 			<key>label</key>
 			<string>Glyph</string>
 			<key>footerText</key>
-			<string>If 'Name' contain typos, a basic 'Switch' glyph will be displayed.</string>
+			<string>If 'Name' contains a typo, a basic 'Switch' glyph will be displayed.</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>

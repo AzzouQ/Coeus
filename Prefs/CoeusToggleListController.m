@@ -4,7 +4,16 @@
 
 @implementation CoeusToggleListController
 
+- (void)viewWillAppear:(BOOL)animated {
+
+	[super viewWillAppear:animated];
+
+	[self reload];
+}
+
 - (void)setSpecifier:(PSSpecifier *)specifier {
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 
 	[self loadSpecifier:specifier];
 	[super setSpecifier:specifier];
@@ -25,7 +34,7 @@
 
 - (void)loadSpecifierFromToggleList {
 
-	NSArray *toggleList = [[[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"] objectForKey:@"toggleList"];
+	NSArray *toggleList = [prefs objectForKey:@"toggleList"];
 
 	for (NSDictionary *toggle in toggleList) {
 		[self addToggleSpecifier:[toggle objectForKey:@"name"]];
@@ -62,68 +71,78 @@
 
 - (void)removeToggle:(PSSpecifier *)specifier {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
 	[toggleList removeObjectAtIndex:INDEX_TOGGLE];
-
-	for (NSInteger index = INDEX_TOGGLE; index < [toggleList count]; index++) {
-
-		NSMutableDictionary *toggle = [[toggleList objectAtIndex:index] mutableCopy];
-
-		[toggle setObject:[NSNumber numberWithInteger:index] forKey:@"index"];
-		[toggleList replaceObjectAtIndex:index withObject:toggle];
-	}
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
 - (void)saveToggle:(PSSpecifier *)specifier {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 	if (!(toggleList)) {
 		toggleList = [[NSMutableArray alloc] init];
 	}
 
-	NSString *eventIdentifier = [self getEventIdentifier:[[toggleList lastObject] objectForKey:@"eventIdentifier"]];
-	[toggleList addObject:[self initToggleWithSpecifier:specifier eventIdentifier:eventIdentifier]];
+	[toggleList addObject:[self initToggleWithSpecifier:specifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
-- (NSMutableDictionary *)initToggleWithSpecifier:(PSSpecifier *)specifier eventIdentifier:(NSString *)eventIdentifier{
+- (NSMutableDictionary *)initToggleWithSpecifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *toggle = [[NSMutableDictionary alloc] init];
 
-	[toggle setObject:[NSNumber numberWithInteger:INDEX_TOGGLE] forKey:@"index"];
 	[toggle setObject:[specifier name] forKey:@"name"];
 	[toggle setObject:@"Switch" forKey:@"glyphName"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isSFSymbols"];
 	[toggle setObject:[NSNumber numberWithFloat:20] forKey:@"sfSymbolsSize"];
 	[toggle setObject:[NSNumber numberWithInteger:4] forKey:@"sfSymbolsWeight"];
 	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
-	[toggle setObject:eventIdentifier forKey:@"eventIdentifier"];
+	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
 	
 
 	return toggle;
 }
 
-- (NSString *)getEventIdentifier:(NSString *)eventIdentifier {
+- (NSString *)getEventIdentifier {
 
-	NSInteger newID = [[[eventIdentifier componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
+	NSMutableArray *toggleList = [prefs objectForKey:@"toggleList"];
+	NSInteger newID = 0;
+	NSInteger tempID = 0;
+
+	for (NSDictionary *toggleDict in toggleList) {
+		tempID = [[[[toggleDict objectForKey:@"eventIdentifier"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
+		if (tempID > newID) {
+			newID = tempID; 
+		}
+	}
 
 	return [NSString stringWithFormat:@"com.azzou.coeus.toggle%ld", newID + 1];
 }
 
 - (void)setToggleController:(PSSpecifier *)specifier {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-	NSMutableDictionary *toggle = [[prefs objectForKey:@"toggleList"][INDEX_TOGGLE] mutableCopy];
-
-	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggle:toggle];
+	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:INDEX_TOGGLE];
 
 	[self.navigationController pushViewController:toggleController animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)atIndex toIndexPath:(NSIndexPath *)toIndex {
+
+	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
+	NSMutableDictionary *toggle = [[toggleList objectAtIndex:atIndex.row] mutableCopy];
+
+	[toggleList removeObject:toggle];
+	[toggleList insertObject:toggle atIndex:toIndex.row];
+
+	[prefs setObject:toggleList forKey:@"toggleList"];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
+
+   return YES;
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {
