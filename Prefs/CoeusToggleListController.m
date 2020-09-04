@@ -107,9 +107,9 @@
 	[toggle setObject:[specifier name] forKey:@"name"];
 	[toggle setObject:@"Switch" forKey:@"glyphName"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isSFSymbols"];
-	[toggle setObject:[NSNumber numberWithFloat:15] forKey:@"sfSymbolsSize"];
-	[toggle setObject:[NSNumber numberWithInteger:1] forKey:@"sfSymbolsWeight"];
-	[toggle setObject:[NSNumber numberWithInteger:1] forKey:@"sfSymbolsScale"];
+	[toggle setObject:[NSNumber numberWithFloat:20] forKey:@"sfSymbolsSize"];
+	[toggle setObject:[NSNumber numberWithInteger:4] forKey:@"sfSymbolsWeight"];
+	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
 	[toggle setObject:eventIdentifier forKey:@"eventIdentifier"];
 	
 
