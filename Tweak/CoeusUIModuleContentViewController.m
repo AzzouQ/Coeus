@@ -1,5 +1,7 @@
 #import "CoeusUIModuleContentViewController.h"
 
+#import <sys/utsname.h>
+
 #define IS_NEW_PAGE(index, togglePage) (!(index % togglePage))
 #define IS_NEW_ROW(index, toggleColumn) (!(index % toggleColumn))
 
@@ -89,16 +91,32 @@ static const int scrollToPageExtanded = 0;
 - (void)viewDidLoad {
 
 	[super viewDidLoad];
-
-	_preferredExpandedContentWidth = UIScreen.mainScreen.bounds.size.width * 0.856;
-	_preferredExpandedContentHeight = self.preferredExpandedContentWidth * 1.34;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
 	[super viewWillAppear:animated];
 
+	[self setExpandedContentSize];
 	[self setCollapsedLayout];
+}
+
+- (void)setExpandedContentSize {
+
+	static struct utsname systemInfo;
+    uname(&systemInfo);
+
+    NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+	NSUInteger multiplier = 0;
+
+	if ([deviceModel containsString:@"iPhone"]) {
+		multiplier = 40;
+	} else if ([deviceModel containsString:@"iPad"]) {
+		multiplier = 45;
+	}
+
+	_preferredExpandedContentWidth = self.view.bounds.size.width;
+	_preferredExpandedContentHeight = multiplier + (((isLabelsExpanded ? self.toggleSizeWithLabels.height : self.toggleSizeWithoutLabels.height) + multiplier) * rowExpanded);
 }
 
 - (void)setCollapsedLayout {
@@ -203,6 +221,7 @@ static const int scrollToPageExtanded = 0;
 }
 
 - (void)willTransitionToExpandedContentMode:(BOOL)isExpanded {
+
 	self.isExpanded = isExpanded;
 }
 
