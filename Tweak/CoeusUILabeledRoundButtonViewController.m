@@ -2,11 +2,14 @@
 
 @implementation CoeusUILabeledRoundButtonViewController
 
-- (instancetype)initWithToggle:(NSArray *)toggle {
+- (instancetype)initWithToggle:(NSDictionary *)toggle {
 
-	UIImage *image = (([[toggle objectAtIndex:3] boolValue])
-	? [UIImage systemImageNamed:[toggle objectAtIndex:2] withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:[[toggle objectAtIndex:4] floatValue] weight:[[toggle objectAtIndex:5] integerValue] scale:[[toggle objectAtIndex:6] integerValue]]]
-	: [UIImage imageNamed:[toggle objectAtIndex:2] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
+	UIImage *image = (([[toggle objectForKey:@"isSFSymbols"] boolValue])
+	? [UIImage systemImageNamed:[toggle objectForKey:@"glyphName"] withConfiguration:[UIImageSymbolConfiguration
+	configurationWithPointSize:[[toggle objectForKey:@"sfSymbolsSize"] floatValue]
+	weight:[[toggle objectForKey:@"sfSymbolsWeight"] integerValue]
+	scale:[[toggle objectForKey:@"sfSymbolsScale"] integerValue]]]
+	: [UIImage imageNamed:[toggle objectForKey:@"glyphName"] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
 
 	if (!(image)) image = [UIImage imageNamed:@"Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
 
@@ -15,7 +18,7 @@
 	}
 
 	if ((self.event = [[CoeusLAEvent alloc] initWithToggle:toggle])) {
-		self.LAEvent = [LAEvent eventWithName:self.event.eventIdentifier mode:[LASharedActivator currentEventMode]];
+		self.LAEvent = [LAEvent eventWithName:[toggle objectForKey:@"eventIdentifier"] mode:[LASharedActivator currentEventMode]];
 		self.listenerName = [LASharedActivator assignedListenerNameForEvent:self.LAEvent];
 	}
 

@@ -36,7 +36,7 @@ static const int scrollToPageExtanded = 0;
 
 	[prefs registerBool:&isIndicatorDark default:NO forKey:@"isIndicatorDark"];
 
-	[prefs registerObject:&toggleList default:[[NSMutableArray alloc] init] forKey:@"toggleList"];
+	[prefs registerObject:&toggleList default:[[NSArray alloc] init] forKey:@"toggleList"];
 
 	[prefs registerInteger:&columnCollapsed default:5 forKey:@"columnCollapsed"];
 	[prefs registerInteger:&rowCollapsed default:1 forKey:@"rowCollapsed"];
@@ -67,12 +67,12 @@ static const int scrollToPageExtanded = 0;
 
 	CoeusUILabeledRoundButtonViewController *toggle = Nil;
 
-	for (NSArray *toggleInfo in toggleList) {
-		toggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithToggle:toggleInfo];
+	for (NSDictionary *toggleDict in toggleList) {
+		toggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithToggle:toggleDict];
 
 		[toggle.view.layer setFrame:(CGRect){ {0, 0}, [toggle.view sizeThatFits:self.view.bounds.size] }];
 
-		toggle.title = [toggleInfo objectAtIndex:0];
+		toggle.title = [toggleDict objectForKey:@"name"];
 		toggle.useAlternateBackground = NO;
 		toggle.labelsVisible = YES;
 

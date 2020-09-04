@@ -4,8 +4,8 @@
 
 @interface CoeusToggleController : HBListController
 
-@property (nonatomic, assign) PSSpecifier *toggleSpecifier;
+@property (nonatomic, assign) NSMutableDictionary *toggle;
 
-- (id)initWithSpecifier:(PSSpecifier *)specifier;
+- (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggle:(NSMutableDictionary *)toggle;
 
 @end

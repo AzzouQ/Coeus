@@ -23,7 +23,7 @@
 			<key>label</key>
 			<string>Add new toggle</string>
 			<key>action</key>
-			<string>addToggle</string>
+			<string>addToggleAlert</string>
 			<key>icon</key>
 			<string>Plus</string>
 		</dict>

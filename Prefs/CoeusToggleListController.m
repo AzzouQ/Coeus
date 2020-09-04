@@ -1,11 +1,8 @@
 #import "CoeusToggleListController.h"
 
+#define INDEX_TOGGLE ([self indexOfSpecifier:specifier] - 3)
+
 @implementation CoeusToggleListController
-
-- (id)specifiers {
-
-	return _specifiers;
-}
 
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -14,91 +11,78 @@
 	[self reload];
 }
 
-- (void)loadFromSpecifier:(PSSpecifier *)specifier {
+- (void)setSpecifier:(PSSpecifier *)specifier {
+
+	[self loadSpecifier:specifier];
+	[super setSpecifier:specifier];
+}
+
+- (void)loadSpecifier:(PSSpecifier *)specifier {
 
 	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
 	NSString *title = [specifier name];
-	NSMutableArray *toggleList = [[[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"] objectForKey:@"toggleList"];
 
 	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
 
-	for (NSArray *toggle in toggleList) {
-		[self addSpecifier:[self createSpecifierFromToggle:[toggle objectAtIndex:0] index:[toggle objectAtIndex:1] glyphName:[toggle objectAtIndex:2] isSFSymbols:[toggle objectAtIndex:3] sfSymbolsSize:[toggle objectAtIndex:4] sfSymbolsWeight:[toggle objectAtIndex:5] sfSymbolsScale:[toggle objectAtIndex:6]]];
-	}
+	[self loadSpecifierFromToggleList];
 
 	[self setTitle:title];
 	[self.navigationItem setTitle:title];
 }
 
-- (void)setSpecifier:(PSSpecifier *)specifier {
+- (void)loadSpecifierFromToggleList {
 
-	[self loadFromSpecifier:specifier];
-	[super setSpecifier:specifier];
+	NSArray *toggleList = [[[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"] objectForKey:@"toggleList"];
+
+	for (NSDictionary *toggle in toggleList) {
+		[self addToggleSpecifier:[toggle objectForKey:@"name"]];
+	}
 }
 
-- (BOOL)shouldReloadSpecifiersOnResume {
+- (PSSpecifier *)addToggleSpecifier:(NSString *)name {
 
-	return false;
-}
-
-- (PSSpecifier *)createSpecifierFromToggle:(NSString *)name index:(NSNumber *)index glyphName:(NSString *)glyphName isSFSymbols:(NSNumber *)isSFSymbols sfSymbolsSize:(NSNumber *)sfSymbolsSize sfSymbolsWeight:(NSNumber *)sfSymbolsWeight sfSymbolsScale:(NSNumber *)sfSymbolsScale {
-
-	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name
-	target:self
-	set:NULL
-	get:NULL
-	detail:NSClassFromString(@"CoeusToggleController")
-	cell:PSLinkCell
-	edit:Nil];
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name target:self set:NULL get:NULL detail:NSClassFromString(@"CoeusToggleController") cell:PSLinkCell edit:Nil];
 
 	[specifier setProperty:@"Toggle" forKey:@"CoeusSub"];
-	[specifier setProperty:index forKey:@"index"];
-	[specifier setProperty:glyphName forKey:@"glyphName"];
-	[specifier setProperty:isSFSymbols forKey:@"isSFSymbols"];
-	[specifier setProperty:sfSymbolsSize forKey:@"sfSymbolsSize"];
-	[specifier setProperty:sfSymbolsWeight forKey:@"sfSymbolsWeight"];
-	[specifier setProperty:sfSymbolsScale forKey:@"sfSymbolsScale"];
 	[specifier setButtonAction:@selector(setToggleController:)];
 	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
 
+	[self addSpecifier:specifier];
 	return specifier;
 }
 
-- (void)addToggle {
+- (void)addToggleAlert {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-
-	UIAlertController *addAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle"
-	message:@"Choose a name for your toggle"
-	preferredStyle:UIAlertControllerStyleAlert];
-	
-	[addAlert addTextFieldWithConfigurationHandler:^(UITextField *tf){}];
-	
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertController *addToggleAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle" message:@"Choose a name for your toggle" preferredStyle:UIAlertControllerStyleAlert];	
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		PSSpecifier *toggleSpecifier = [self createSpecifierFromToggle:[addAlert.textFields[0] text] index:[NSNumber numberWithInteger:[[prefs objectForKey:@"toggleList"] count]] glyphName:@"Switch" isSFSymbols:[NSNumber numberWithBool:NO] sfSymbolsSize:[NSNumber numberWithFloat:15] sfSymbolsWeight:[NSNumber numberWithInteger:1] sfSymbolsScale:[NSNumber numberWithInteger:1]];
-		[self saveToggle:toggleSpecifier];
-		[self addSpecifier:toggleSpecifier];
-		[self reload];
+		PSSpecifier *specifier = [self addToggleSpecifier:[addToggleAlert.textFields[0] text]];
+		[self saveToggle:specifier];
 	}];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 
-	[addAlert addAction:addAction];
-	[addAlert addAction:cancelAction];
+	[addToggleAlert addTextFieldWithConfigurationHandler:^(UITextField *tf){}];
+	[addToggleAlert addAction:addAction];
+	[addToggleAlert addAction:cancelAction];
 
-	[self presentViewController:addAlert animated:YES completion:nil];
+	[self presentViewController:addToggleAlert animated:YES completion:nil];
 }
 
-- (NSMutableArray *)getToggleFromSpecifier:(PSSpecifier *)specifier {
+- (void)removeToggle:(PSSpecifier *)specifier {
 
-	NSString *name = [specifier name];
-	NSNumber *index = [specifier propertyForKey:@"index"];
-	NSString *glyphName = [specifier propertyForKey:@"glyphName"];
-	NSNumber *isSFSymbols = [specifier propertyForKey:@"isSFSymbols"];
-	NSNumber *sfSymbolsSize = [specifier propertyForKey:@"sfSymbolsSize"];
-	NSNumber *sfSymbolsWeight = [specifier propertyForKey:@"sfSymbolsWeight"];
-	NSNumber *sfSymbolsScale = [specifier propertyForKey:@"sfSymbolsScale"];
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	return [[NSMutableArray alloc] initWithObjects:name, index, glyphName, isSFSymbols, sfSymbolsSize, sfSymbolsWeight, sfSymbolsScale, nil];
+	[toggleList removeObjectAtIndex:INDEX_TOGGLE];
+
+	for (NSInteger index = INDEX_TOGGLE; index < [toggleList count]; index++) {
+
+		NSMutableDictionary *toggle = [[toggleList objectAtIndex:index] mutableCopy];
+
+		[toggle setObject:[NSNumber numberWithInteger:index] forKey:@"index"];
+		[toggleList replaceObjectAtIndex:index withObject:toggle];
+	}
+
+	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
 - (void)saveToggle:(PSSpecifier *)specifier {
@@ -109,24 +93,49 @@
 		toggleList = [[NSMutableArray alloc] init];
 	}
 
-	[toggleList addObject:[self getToggleFromSpecifier:specifier]];
+	NSString *eventIdentifier = [self getEventIdentifier:[[toggleList lastObject] objectForKey:@"eventIdentifier"]];
+	[toggleList addObject:[self initToggleWithSpecifier:specifier eventIdentifier:eventIdentifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
-- (void)removeToggle:(PSSpecifier *)specifier {
+- (NSMutableDictionary *)initToggleWithSpecifier:(PSSpecifier *)specifier eventIdentifier:(NSString *)eventIdentifier{
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
+	NSMutableDictionary *toggle = [[NSMutableDictionary alloc] init];
 
-	[toggleList removeObject:[self getToggleFromSpecifier:specifier]];
+	[toggle setObject:[NSNumber numberWithInteger:INDEX_TOGGLE] forKey:@"index"];
+	[toggle setObject:[specifier name] forKey:@"name"];
+	[toggle setObject:@"Switch" forKey:@"glyphName"];
+	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isSFSymbols"];
+	[toggle setObject:[NSNumber numberWithFloat:15] forKey:@"sfSymbolsSize"];
+	[toggle setObject:[NSNumber numberWithInteger:1] forKey:@"sfSymbolsWeight"];
+	[toggle setObject:[NSNumber numberWithInteger:1] forKey:@"sfSymbolsScale"];
+	[toggle setObject:eventIdentifier forKey:@"eventIdentifier"];
+	
 
-	[prefs setObject:toggleList forKey:@"toggleList"];
+	return toggle;
+}
+
+- (NSString *)getEventIdentifier:(NSString *)eventIdentifier {
+
+	NSInteger newID = [[[eventIdentifier componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
+
+	return [NSString stringWithFormat:@"com.azzou.coeus.toggle%ld", newID + 1];
 }
 
 - (void)setToggleController:(PSSpecifier *)specifier {
-	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier];
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+	NSMutableDictionary *toggle = [[prefs objectForKey:@"toggleList"][INDEX_TOGGLE] mutableCopy];
+
+	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggle:toggle];
+
 	[self.navigationController pushViewController:toggleController animated:YES];
+}
+
+- (BOOL)shouldReloadSpecifiersOnResume {
+
+	return false;
 }
 
 @end

@@ -2,9 +2,8 @@
 
 @interface CoeusLAEvent : NSObject <LAEventDataSource>
 
-@property (nonatomic, assign) NSString *eventIdentifier;
-@property (nonatomic, assign) NSString *titleForEventName;
+@property (nonatomic, assign) NSDictionary *toggle;
 
-- (id)initWithToggle:(NSArray *)toggle;
+- (id)initWithToggle:(NSDictionary *)toggle;
 
 @end
