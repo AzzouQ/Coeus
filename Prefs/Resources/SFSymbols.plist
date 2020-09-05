@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+	<key>items</key>
+	<array>
+
+		<dict>
+			<key>cellClass</key>
+			<string>HBLinkTableCell</string>
+			<key>label</key>
+			<string>SF Symbols</string>
+			<key>subtitle</key>
+			<string>Find correct names using this documentation</string>
+			<key>url</key>
+			<string>https://developer.apple.com/sf-symbols/</string>
+		</dict>
+
+	</array>
+
+</dict>
+</plist>

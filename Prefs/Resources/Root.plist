@@ -27,7 +27,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Toggle</string>
+			<string>Toggles</string>
 			<key>detail</key>
  			<string>CoeusToggleListController</string>
 		</dict>

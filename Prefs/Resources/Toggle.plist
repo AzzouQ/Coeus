@@ -3,9 +3,6 @@
 <plist version="1.0">
 <dict>
 
-	<key>title</key>
-	<string>Coeus</string>
-
 	<key>items</key>
 	<array>
 
@@ -21,18 +18,6 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Glyph</string>
-			<key>footerText</key>
-			<string>If 'Name' contains a typo, a basic 'Switch' glyph will be displayed.</string>
-		</dict>
-		<dict>
-			<key>cellClass</key>
-			<string>HBLinkTableCell</string>
-			<key>label</key>
-			<string>Documentation</string>
-			<key>subtitle</key>
-			<string>Find correct SF Symbols names</string>
-			<key>url</key>
-			<string>https://developer.apple.com/sf-symbols/</string>
 		</dict>
 
 		<dict>

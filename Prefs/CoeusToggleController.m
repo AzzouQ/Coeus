@@ -15,20 +15,21 @@
 	self.toggleIndex = toggleIndex;
 	self.toggleDict = [[prefs objectForKey:@"toggleList"][self.toggleIndex] mutableCopy];
 
-	[self setSpecifier:specifier];
-
 	return self;
 }
 
-- (void)setSpecifier:(PSSpecifier *)specifier {
+- (id)specifiers {
 
-	_specifiers = [[self loadSpecifiersFromPlistName:@"Toggle" target:self] retain];
+	if (_specifiers == nil) {
+		_specifiers = [[self loadSpecifiersFromPlistName:@"Toggle" target:self] retain];
+	}
+
 	[self loadSpecifiersFromToggle];
 
-	[self setTitle:[specifier name]];
-	[self.navigationItem setTitle:[specifier name]];
+	[self setTitle:[self.specifier name]];
+	[self.navigationItem setTitle:[self.specifier name]];
 
-	[super setSpecifier:specifier];
+	return _specifiers;
 }
 
 - (void)loadSpecifiersFromToggle {
@@ -43,6 +44,7 @@
 			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6];
 			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7];
 			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8];
+			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"Documentation" target:self] retain] atIndex:9];
 		}
 	}
 }
@@ -215,17 +217,22 @@
 		[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6 animated:YES];
 		[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7 animated:YES];
 		[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8 animated:YES];
+		[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"SFSymbols" target:self] retain] atIndex:9 animated:YES];
+
+		[self setTitle:[self.specifier name]];
+		[self.navigationItem setTitle:[self.specifier name]];
+
 	} else {
 		[[self specifierAtIndex:3] setProperty:@YES forKey:@"enabled"];
 		[self removeSpecifierAtIndex:5 animated:YES];
 		[self removeSpecifierAtIndex:5 animated:YES];
 		[self removeSpecifierAtIndex:5 animated:YES];
 		[self removeSpecifierAtIndex:5 animated:YES];
+		[self removeSpecifierAtIndex:5 animated:YES];
 	}
 
-	[self reloadSpecifierAtIndex:3 animated:YES];
-
 	[self.toggleDict setObject:isSFSymbols forKey:@"isSFSymbols"];
+	[self reloadSpecifierAtIndex:3];
 }
 
 - (NSNumber *)isSFSymbols {

@@ -11,15 +11,15 @@
 	[self reload];
 }
 
-- (void)setSpecifier:(PSSpecifier *)specifier {
+- (id)specifiers {
 
-	_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
+	if (_specifiers == nil) {
+		_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
+	}
+
 	[self loadSpecifierFromToggleList];
 
-	[self setTitle:[specifier name]];
-	[self.navigationItem setTitle:[specifier name]];
-
-	[super setSpecifier:specifier];
+	return _specifiers;
 }
 
 - (void)loadSpecifierFromToggleList {
