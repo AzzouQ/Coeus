@@ -24,4 +24,16 @@
 @property (nonatomic, assign) CGFloat spaceWidth;
 @property (nonatomic, assign) CGFloat spaceHeight;
 
+- (void)initPreferences;
+- (void)initScrollView;
+- (void)intiToggles;
+
+- (void)setExpandedContentSize;
+
+- (void)initLayout;
+
+- (void)setLayout;
+- (void)setScrollView;
+- (CGSize)getScrollViewContentSize;
+
 @end

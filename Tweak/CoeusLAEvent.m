@@ -4,12 +4,12 @@
 
 - (instancetype)initWithToggle:(NSDictionary *)toggle {
 
-	if ((self = [super init])) {
-
-		self.toggle = toggle;
-
-		[LASharedActivator registerEventDataSource:self forEventName:[self.toggle objectForKey:@"eventIdentifier"]];
+	if (!(self = [super init])) {
+		return self;
 	}
+	
+	self.toggle = toggle;
+	[LASharedActivator registerEventDataSource:self forEventName:[self.toggle objectForKey:@"eventIdentifier"]];
 
 	return self;
 }

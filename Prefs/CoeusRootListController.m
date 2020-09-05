@@ -4,40 +4,42 @@
 
 - (instancetype)init {
 
-	self = [super init];
-
-	if (self) {
-		CoeusAppearanceSettings *appearanceSettings = [[CoeusAppearanceSettings alloc] init];
-		self.hb_appearanceSettings = appearanceSettings;
-
-		self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,10)];
-		self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-		self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-		self.titleLabel.text = @"1.0";
-		self.titleLabel.textColor = [UIColor colorWithRed:0.96 green:0.77 blue:0.75 alpha:1.0];
-		self.titleLabel.textAlignment = NSTextAlignmentCenter;
-
-		self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
-		self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-		self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/CoeusPrefs.bundle/icon@2x.png"];
-		self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
-		self.iconView.alpha = 0.0;
-
-		self.navigationItem.titleView = [UIView new];
-		[self.navigationItem.titleView addSubview:self.titleLabel];
-		[self.navigationItem.titleView addSubview:self.iconView];
-
-		[NSLayoutConstraint activateConstraints:@[
-			[self.titleLabel.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-			[self.titleLabel.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-			[self.titleLabel.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-			[self.titleLabel.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
-			[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
-			[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
-			[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
-			[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
-		]];
+	if (!(self = [super init])) {
+		return self;
 	}
+
+	prefs = [[HBPreferences alloc] initWithIdentifier: @"com.azzou.coeusprefs"];
+
+	CoeusAppearanceSettings *appearanceSettings = [[CoeusAppearanceSettings alloc] init];
+	self.hb_appearanceSettings = appearanceSettings;
+
+	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,10)];
+	self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+	self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	self.titleLabel.text = @"1.0";
+	self.titleLabel.textColor = [UIColor colorWithRed:0.96 green:0.77 blue:0.75 alpha:1.0];
+	self.titleLabel.textAlignment = NSTextAlignmentCenter;
+
+	self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
+	self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+	self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/CoeusPrefs.bundle/icon@2x.png"];
+	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+	self.iconView.alpha = 0.0;
+
+	self.navigationItem.titleView = [UIView new];
+	[self.navigationItem.titleView addSubview:self.titleLabel];
+	[self.navigationItem.titleView addSubview:self.iconView];
+
+	[NSLayoutConstraint activateConstraints:@[
+		[self.titleLabel.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+		[self.titleLabel.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+		[self.titleLabel.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+		[self.titleLabel.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+		[self.iconView.topAnchor constraintEqualToAnchor:self.navigationItem.titleView.topAnchor],
+		[self.iconView.leadingAnchor constraintEqualToAnchor:self.navigationItem.titleView.leadingAnchor],
+		[self.iconView.trailingAnchor constraintEqualToAnchor:self.navigationItem.titleView.trailingAnchor],
+		[self.iconView.bottomAnchor constraintEqualToAnchor:self.navigationItem.titleView.bottomAnchor],
+	]];
 
 	return self;
 }
@@ -110,20 +112,14 @@
 
 - (void)reset {
 
-	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Coeus"
-	message:@"Do you really want to reset preferences ?"
-	preferredStyle:UIAlertControllerStyleActionSheet];
-	
+	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Coeus" message:@"Do you really want to reset preferences ?" preferredStyle:UIAlertControllerStyleActionSheet];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Nah" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yeah" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-
-		HBPreferences *preferences = [[HBPreferences alloc] initWithIdentifier: @"com.azzou.coeusprefs"];
-		for (NSString *key in [preferences dictionaryRepresentation]) {
-			[preferences removeObjectForKey:key];
+		for (NSString *key in [prefs dictionaryRepresentation]) {
+			[prefs removeObjectForKey:key];
 		}
 		[self respring];
 	}];
-
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Nah" style:UIAlertActionStyleCancel handler:nil];
 
 	[resetAlert addAction:confirmAction];
 	[resetAlert addAction:cancelAction];

@@ -9,9 +9,9 @@
 	configurationWithPointSize:[[toggle objectForKey:@"sfSymbolsSize"] floatValue]
 	weight:[[toggle objectForKey:@"sfSymbolsWeight"] integerValue]
 	scale:[[toggle objectForKey:@"sfSymbolsScale"] integerValue]]]
-	: [UIImage imageNamed:[toggle objectForKey:@"glyphName"] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
+	: [UIImage imageNamed:[NSString stringWithFormat:@"Glyphs/%@", [toggle objectForKey:@"glyphName"]] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
 
-	if (!(image)) image = [UIImage imageNamed:@"Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
+	if (!(image)) image = [UIImage imageNamed:@"Glyphs/Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
 
 	if (!(self = [super initWithGlyphImage:image highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
 		return self;

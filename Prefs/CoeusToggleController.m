@@ -22,21 +22,13 @@
 
 - (void)setSpecifier:(PSSpecifier *)specifier {
 
-	[self loadSpecifier:specifier];
-	[super setSpecifier:specifier];
-}
-
-- (void)loadSpecifier:(PSSpecifier *)specifier {
-
-	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
-	NSString *title = [specifier name];
-
-	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
-
+	_specifiers = [[self loadSpecifiersFromPlistName:@"Toggle" target:self] retain];
 	[self loadSpecifiersFromToggle];
 
-	[self setTitle:title];
-	[self.navigationItem setTitle:title];
+	[self setTitle:[specifier name]];
+	[self.navigationItem setTitle:[specifier name]];
+
+	[super setSpecifier:specifier];
 }
 
 - (void)loadSpecifiersFromToggle {
@@ -67,7 +59,7 @@
 	NSArray *glyphList = [self getGlyphList];
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Choose from preset" target:self set:@selector(setGlyphName:) get:@selector(getGlyphName) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
 
-	[specifier setProperty:@"Glyph are located in '/Library/ControlCenter/Bundles/Coeus.bundle'" forKey:@"staticTextMessage"];
+	[specifier setProperty:@"Glyph are located in '/Library/ControlCenter/Bundles/Coeus.bundle/Glyphs/'" forKey:@"staticTextMessage"];
 
 	specifier.values = glyphList;
 	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:glyphList forKeys:specifier.values];
@@ -78,7 +70,7 @@
 
 - (NSArray *)getGlyphList {
 
-	NSArray *bundleDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Library/ControlCenter/Bundles/Coeus.bundle/" error:NULL];
+	NSArray *bundleDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Library/ControlCenter/Bundles/Coeus.bundle/Glyphs/" error:NULL];
 
 	NSMutableArray *toggleGlyphList = [[NSMutableArray alloc] init];
 	[bundleDirectory enumerateObjectsUsingBlock:^(id file, NSUInteger index, BOOL *stop) {
@@ -271,10 +263,9 @@
 	return [self.toggleDict objectForKey:@"sfSymbolsScale"];
 }
 
-
 - (BOOL)shouldReloadSpecifiersOnResume {
 
-	return false;
+	return NO;
 }
 
 @end

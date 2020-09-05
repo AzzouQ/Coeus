@@ -13,23 +13,13 @@
 
 - (void)setSpecifier:(PSSpecifier *)specifier {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-
-	[self loadSpecifier:specifier];
-	[super setSpecifier:specifier];
-}
-
-- (void)loadSpecifier:(PSSpecifier *)specifier {
-
-	NSString *sub = [specifier propertyForKey:@"CoeusSub"];
-	NSString *title = [specifier name];
-
-	_specifiers = [[self loadSpecifiersFromPlistName:sub target:self] retain];
-
+	_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
 	[self loadSpecifierFromToggleList];
 
-	[self setTitle:title];
-	[self.navigationItem setTitle:title];
+	[self setTitle:[specifier name]];
+	[self.navigationItem setTitle:[specifier name]];
+
+	[super setSpecifier:specifier];
 }
 
 - (void)loadSpecifierFromToggleList {
@@ -147,7 +137,7 @@
 
 - (BOOL)shouldReloadSpecifiersOnResume {
 
-	return false;
+	return NO;
 }
 
 @end

@@ -22,14 +22,15 @@ static const int scrollToPageExtanded = 0;
 
 - (instancetype)initWithNibName:(NSString*)name bundle:(NSBundle*)bundle {
 
-	if ((self = [super initWithNibName:name bundle:bundle])) {
-
-		self.view.autoresizesSubviews = YES;
-
-		[self initPreferences];
-		[self initScrollView];
-		[self intiToggles];
+	if (!(self = [super initWithNibName:name bundle:bundle])) {
+		return self;
 	}
+
+	self.view.autoresizesSubviews = YES;
+
+	[self initPreferences];
+	[self initScrollView];
+	[self intiToggles];
 
 	return self;
 }
@@ -98,7 +99,7 @@ static const int scrollToPageExtanded = 0;
 	[super viewWillAppear:animated];
 
 	[self setExpandedContentSize];
-	[self setCollapsedLayout];
+	[self initLayout];
 }
 
 - (void)setExpandedContentSize {
@@ -119,30 +120,23 @@ static const int scrollToPageExtanded = 0;
 	_preferredExpandedContentHeight = multiplier + (((isLabelsExpanded ? self.toggleSizeWithLabels.height : self.toggleSizeWithoutLabels.height) + multiplier) * rowExpanded);
 }
 
-- (void)setCollapsedLayout {
+- (void)initLayout {
 
-	self.isPaging = isPagingCollapsed;
-	self.isLabels = isLabelsCollapsed;
+	if (self.isExpanded) {
+		self.isPaging = isPagingExpanded;
+		self.isLabels = isLabelsExpanded;
+		self.isScrollVertical = isScrollVertical;
+		self.column = columnExpanded;
+		self.row = rowExpanded;
+	} else {
+		self.isPaging = isPagingCollapsed;
+		self.isLabels = isLabelsCollapsed;
+		self.isScrollVertical = NO;
+		self.column = columnCollapsed;
+		self.row = rowCollapsed;
+	}
+
 	self.toggleSize = (self.isLabels) ? self.toggleSizeWithLabels : self.toggleSizeWithoutLabels;
-	self.isScrollVertical = NO;
-	self.column = columnCollapsed;
-	self.row = rowCollapsed;
-	self.togglePage = self.column * self.row;
-	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, self.column, self.toggleSize.width);
-	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
-
-	[self setScrollView];
-	[self setLayout];
-}
-
-- (void)setExpandedLayout {
-
-	self.isPaging = isPagingExpanded;
-	self.isLabels = isLabelsExpanded;
-	self.toggleSize = (self.isLabels) ? self.toggleSizeWithLabels : self.toggleSizeWithoutLabels;
-	self.isScrollVertical = isScrollVertical;
-	self.column = columnExpanded;
-	self.row = rowExpanded;
 	self.togglePage = self.column * self.row;
 	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, self.column, self.toggleSize.width);
 	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
@@ -228,7 +222,7 @@ static const int scrollToPageExtanded = 0;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context){
-		(self.isExpanded) ? [self setExpandedLayout] : [self setCollapsedLayout];
+		[self initLayout];
 	} completion:nil];
 }
 

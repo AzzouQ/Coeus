@@ -4,12 +4,13 @@
 
 - (instancetype)init {
 
-	if ((self = [super init])) {
-
-		prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-
-		_contentViewController = [[CoeusUIModuleContentViewController alloc] init];
+	if (!(self = [super init])) {
+		return self;
 	}
+	
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+
+	_contentViewController = [[CoeusUIModuleContentViewController alloc] init];
 
 	return self;
 }
