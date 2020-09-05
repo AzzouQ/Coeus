@@ -4,6 +4,27 @@
 
 @interface CoeusToggleController : HBListController
 
+typedef NS_ENUM(NSInteger, UIImageSymbolWeight) {
+    UIImageSymbolWeightUnspecified = 0,
+    UIImageSymbolWeightUltraLight = 1,
+    UIImageSymbolWeightThin,
+    UIImageSymbolWeightLight,
+    UIImageSymbolWeightRegular,
+    UIImageSymbolWeightMedium,
+    UIImageSymbolWeightSemibold,
+    UIImageSymbolWeightBold,
+    UIImageSymbolWeightHeavy,
+    UIImageSymbolWeightBlack
+};
+
+typedef NS_ENUM(NSInteger, UIImageSymbolScale) {
+    UIImageSymbolScaleDefault = -1,      // use the system default size
+    UIImageSymbolScaleUnspecified = 0,   // allow the system to pick a size based on the context
+    UIImageSymbolScaleSmall = 1,
+    UIImageSymbolScaleMedium,
+    UIImageSymbolScaleLarge,
+};
+
 @property (nonatomic, assign) NSInteger             toggleIndex;
 @property (nonatomic, assign) NSMutableDictionary   *toggleDict;
 

@@ -26,7 +26,7 @@
 	self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
 	self.iconView.alpha = 0.0;
 
-	self.navigationItem.titleView = [UIView new];
+	self.navigationItem.titleView = [[UIView alloc] init];
 	[self.navigationItem.titleView addSubview:self.titleLabel];
 	[self.navigationItem.titleView addSubview:self.iconView];
 
