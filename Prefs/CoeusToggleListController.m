@@ -35,9 +35,8 @@
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name target:self set:NULL get:NULL detail:NSClassFromString(@"CoeusToggleController") cell:PSLinkCell edit:Nil];
 
-	[specifier setProperty:@"Toggle" forKey:@"CoeusSub"];
 	[specifier setButtonAction:@selector(setToggleController:)];
-	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:PSDeletionActionKey];
+	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:@"deletionAction"];
 
 	[self addSpecifier:specifier];
 	return specifier;

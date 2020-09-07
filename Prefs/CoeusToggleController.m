@@ -92,21 +92,38 @@
 	return specifier;
 }
 
+- (PSSpecifier *)createSFSymbolsSizeSpecifier {
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Size" target:self set:@selector(setSFSymbolsSize:) get:@selector(getSFSymbolsSize) detail:Nil cell:PSSliderCell edit:Nil];
+
+	[specifier setProperty:[UIImage imageNamed:@"Size" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] forKey:@"leftImage"];
+	[specifier setProperty:[NSNumber numberWithFloat:20.0] forKey:@"default"];
+	[specifier setProperty:[NSNumber numberWithFloat:15.0] forKey:@"min"];
+	[specifier setProperty:[NSNumber numberWithFloat:25.0] forKey:@"max"];
+	[specifier setProperty:@YES forKey:@"showValue"];
+
+	return specifier;
+}
+
 - (PSSpecifier *)createSFSymbolsWeightSpecifier {
 
-	NSArray *sfSymbolsWeightValueList = [[NSMutableArray alloc] initWithObjects:
-	[NSNumber numberWithInteger:UIImageSymbolWeightUltraLight],
-	[NSNumber numberWithInteger:UIImageSymbolWeightThin],
-	[NSNumber numberWithInteger:UIImageSymbolWeightLight],
-	[NSNumber numberWithInteger:UIImageSymbolWeightRegular],
-	[NSNumber numberWithInteger:UIImageSymbolWeightMedium],
-	[NSNumber numberWithInteger:UIImageSymbolWeightSemibold],
-	[NSNumber numberWithInteger:UIImageSymbolWeightBold],
-	[NSNumber numberWithInteger:UIImageSymbolWeightHeavy],
-	[NSNumber numberWithInteger:UIImageSymbolWeightBlack],
-	nil];
+	NSArray *sfSymbolsWeightValueList = nil;
 
-	NSArray *sfSymbolsWeightNameList = [[NSMutableArray alloc] initWithObjects:
+	if (@available(iOS 13, *)) {
+		sfSymbolsWeightValueList = [[NSArray alloc] initWithObjects:
+		[NSNumber numberWithInteger:UIImageSymbolWeightUltraLight],
+		[NSNumber numberWithInteger:UIImageSymbolWeightThin],
+		[NSNumber numberWithInteger:UIImageSymbolWeightLight],
+		[NSNumber numberWithInteger:UIImageSymbolWeightRegular],
+		[NSNumber numberWithInteger:UIImageSymbolWeightMedium],
+		[NSNumber numberWithInteger:UIImageSymbolWeightSemibold],
+		[NSNumber numberWithInteger:UIImageSymbolWeightBold],
+		[NSNumber numberWithInteger:UIImageSymbolWeightHeavy],
+		[NSNumber numberWithInteger:UIImageSymbolWeightBlack],
+		nil];
+	}
+
+	NSArray *sfSymbolsWeightNameList = [[NSArray alloc] initWithObjects:
 	@"Ultra Light",
 	@"Thin",
 	@"Light",
@@ -127,28 +144,19 @@
 	return specifier;
 }
 
-- (PSSpecifier *)createSFSymbolsSizeSpecifier {
-
-	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Size" target:self set:@selector(setSFSymbolsSize:) get:@selector(getSFSymbolsSize) detail:Nil cell:PSSliderCell edit:Nil];
-
-	[specifier setProperty:[UIImage imageNamed:@"Size" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] forKey:@"leftImage"];
-	[specifier setProperty:[NSNumber numberWithFloat:20.0] forKey:@"default"];
-	[specifier setProperty:[NSNumber numberWithFloat:15.0] forKey:@"min"];
-	[specifier setProperty:[NSNumber numberWithFloat:25.0] forKey:@"max"];
-	[specifier setProperty:@YES forKey:@"showValue"];
-
-	return specifier;
-}
-
 - (PSSpecifier *)createSFSymbolsScaleSpecifier {
 
-	NSArray *sfSymbolsScaleValueList = [[NSMutableArray alloc] initWithObjects:
-	[NSNumber numberWithInteger:UIImageSymbolScaleSmall],
-	[NSNumber numberWithInteger:UIImageSymbolScaleMedium],
-	[NSNumber numberWithInteger:UIImageSymbolScaleLarge],
-	nil];
+	NSArray *sfSymbolsScaleValueList = nil;
 
-	NSArray *sfSymbolsScaleNameList = [[NSMutableArray alloc] initWithObjects:
+	if (@available(iOS 13, *)) {
+		sfSymbolsScaleValueList = [[NSArray alloc] initWithObjects:
+		[NSNumber numberWithInteger:UIImageSymbolScaleSmall],
+		[NSNumber numberWithInteger:UIImageSymbolScaleMedium],
+		[NSNumber numberWithInteger:UIImageSymbolScaleLarge],
+		nil];
+	}
+
+	NSArray *sfSymbolsScaleNameList = [[NSArray alloc] initWithObjects:
 	@"Small",
 	@"Medium",
 	@"Large",

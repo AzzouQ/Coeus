@@ -1,15 +1,22 @@
 #import "CoeusUILabeledRoundButtonViewController.h"
 
+
 @implementation CoeusUILabeledRoundButtonViewController
 
 - (instancetype)initWithToggle:(NSDictionary *)toggle {
 
-	UIImage *image = (([[toggle objectForKey:@"isSFSymbols"] boolValue])
-	? [UIImage systemImageNamed:[toggle objectForKey:@"glyphName"] withConfiguration:[UIImageSymbolConfiguration
-	configurationWithPointSize:[[toggle objectForKey:@"sfSymbolsSize"] floatValue]
-	weight:[[toggle objectForKey:@"sfSymbolsWeight"] integerValue]
-	scale:[[toggle objectForKey:@"sfSymbolsScale"] integerValue]]]
-	: [UIImage imageNamed:[NSString stringWithFormat:@"Glyphs/%@", [toggle objectForKey:@"glyphName"]] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]);
+	UIImage *image = nil;
+
+	if ([[toggle objectForKey:@"isSFSymbols"] boolValue]) {
+		if (@available(iOS 13.0, *)) {
+			image = [UIImage systemImageNamed:[toggle objectForKey:@"glyphName"] withConfiguration:[UIImageSymbolConfiguration
+			configurationWithPointSize:[[toggle objectForKey:@"sfSymbolsSize"] floatValue]
+			weight:[[toggle objectForKey:@"sfSymbolsWeight"] integerValue]
+			scale:[[toggle objectForKey:@"sfSymbolsScale"] integerValue]]];
+		} 
+	} else {
+		image = [UIImage imageNamed:[NSString stringWithFormat:@"Glyphs/%@", [toggle objectForKey:@"glyphName"]] inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
+	}
 
 	if (!(image)) image = [UIImage imageNamed:@"Glyphs/Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
 
