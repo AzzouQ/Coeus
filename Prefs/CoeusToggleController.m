@@ -15,7 +15,18 @@
 	self.toggleIndex = toggleIndex;
 	self.toggleDict = [[prefs objectForKey:@"toggleList"][self.toggleIndex] mutableCopy];
 
+	[prefs setObject:[self.toggleDict objectForKey:@"highlightColor"] forKey:@"highlightColor"];
+
 	return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+
+	[super viewWillAppear:animated];
+
+	[[self specifierForID:@"highlightColor"] setProperty:@([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue]) forKey:@"enabled"];
+
+	[self reload];
 }
 
 - (id)specifiers {
@@ -34,19 +45,22 @@
 
 - (void)loadSpecifiersFromToggle {
 
+	NSUInteger index = 4;
+
 	[self insertSpecifier:[self createToggleNameSpecifier] atIndex:1];
 	[self insertSpecifier:[self createGlyphListSpecifier] atIndex:3];
 	if (@available(iOS 13.0, *)) {
-		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:4];
+		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:index++];
 		if ([[self.toggleDict objectForKey:@"isSFSymbols"] boolValue]) {
 			[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
-			[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:5];
-			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6];
-			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7];
-			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8];
-			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"Documentation" target:self] retain] atIndex:9];
+			[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:index++];
+			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:index++];
+			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:index++];
+			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:index++];
+			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"Documentation" target:self] retain] atIndex:index++];
 		}
 	}
+	[self insertSpecifier:[self createHighlightColorSpecifier] atIndex:(index + 1)];
 }
 
 - (PSSpecifier *)createToggleNameSpecifier {
@@ -178,16 +192,29 @@
 	return specifier;
 }
 
+- (PSSpecifier *)createHighlightColorSpecifier {
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Custom Highlight" target:self set:@selector(setHighlightColor:) get:@selector(isHighlightColor) detail:Nil cell:PSSwitchCell edit:Nil];
+
+	[specifier setIdentifier:@"isHighlightColor"];
+
+	return specifier;
+}
+
 - (void)updateToggle {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
 	[self.view endEditing:YES];
 
+	[self.toggleDict setObject:[prefs objectForKey:@"highlightColor"] forKey:@"highlightColor"];
+
 	[toggleList replaceObjectAtIndex:self.toggleIndex withObject:self.toggleDict];
 	[prefs setObject:toggleList forKey:@"toggleList"];
-	[self.specifier setName:[self.toggleDict objectForKey:@"name"]];
 
+	[prefs removeObjectForKey:@"highlightColor"];
+
+	[self.specifier setName:[self.toggleDict objectForKey:@"name"]];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -276,6 +303,19 @@
 - (NSNumber *)getSFSymbolsScale {
 
 	return [self.toggleDict objectForKey:@"sfSymbolsScale"];
+}
+
+- (void)setHighlightColor:(NSNumber *)isHighlightColor {
+
+	[[self specifierForID:@"highlightColor"] setProperty:@([isHighlightColor boolValue]) forKey:@"enabled"];
+
+	[self.toggleDict setObject:isHighlightColor forKey:@"isHighlightColor"];
+	[self reloadSpecifierID:@"highlightColor"];
+}
+
+- (NSNumber *)isHighlightColor {
+
+	return [self.toggleDict objectForKey:@"isHighlightColor"];
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {

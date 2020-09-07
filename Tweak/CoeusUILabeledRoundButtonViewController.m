@@ -1,11 +1,11 @@
 #import "CoeusUILabeledRoundButtonViewController.h"
 
-
 @implementation CoeusUILabeledRoundButtonViewController
 
 - (instancetype)initWithToggle:(NSDictionary *)toggle {
 
 	UIImage *image = nil;
+	UIColor *color = ([[toggle objectForKey:@"isHighlightColor"] boolValue] ? LCPParseColorString([toggle objectForKey:@"highlightColor"], @"007AFF") : [UIColor systemBlueColor]);
 
 	if ([[toggle objectForKey:@"isSFSymbols"] boolValue]) {
 		if (@available(iOS 13.0, *)) {
@@ -20,7 +20,7 @@
 
 	if (!(image)) image = [UIImage imageNamed:@"Glyphs/Switch" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
 
-	if (!(self = [super initWithGlyphImage:image highlightColor:[UIColor systemBlueColor] useLightStyle:YES])) {
+	if (!(self = [super initWithGlyphImage:image highlightColor:color useLightStyle:YES])) {
 		return self;
 	}
 

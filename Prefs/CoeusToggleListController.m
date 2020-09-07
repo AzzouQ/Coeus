@@ -1,5 +1,7 @@
 #import "CoeusToggleListController.h"
 
+#import <libcolorpicker.h>
+
 #define INDEX_TOGGLE ([self indexOfSpecifier:specifier] - 3)
 
 @implementation CoeusToggleListController
@@ -89,6 +91,8 @@
 	[toggle setObject:[NSNumber numberWithFloat:20] forKey:@"sfSymbolsSize"];
 	[toggle setObject:[NSNumber numberWithInteger:4] forKey:@"sfSymbolsWeight"];
 	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
+	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
+	[toggle setObject:[UIColor PF_hexFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
 	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
 	
 

@@ -2,6 +2,7 @@
 #import <ControlCenterUIKit/CCUILabeledRoundButton.h>
 #import <ControlCenterUIKit/CCUILabeledRoundButtonViewController.h>
 #import <Flipswitch/Flipswitch.h>
+#import <libcolorpicker.h>
 
 #import "CoeusLAEvent.h"
 
