@@ -10,7 +10,7 @@
 		return self;
 	}
 
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(updateToggle)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveToggle)];
 	self.specifier = specifier;
 	self.toggleIndex = toggleIndex;
 	self.toggleDict = [[prefs objectForKey:@"toggleList"][self.toggleIndex] mutableCopy];
@@ -25,6 +25,7 @@
 	[super viewWillAppear:animated];
 
 	[[self specifierForID:@"highlightColor"] setProperty:@([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue]) forKey:@"enabled"];
+	[self insertSpecifier:[self createConfirmationSpecifier] atEndOfGroup:3];
 
 	[self reload];
 }
@@ -57,10 +58,10 @@
 			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:index++];
 			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:index++];
 			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:index++];
-			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"Documentation" target:self] retain] atIndex:index++];
+			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"SFSymbols" target:self] retain] atIndex:index++];
 		}
 	}
-	[self insertSpecifier:[self createHighlightColorSpecifier] atIndex:(index + 1)];
+	[self insertSpecifier:[self createHighlightColorSpecifier] atIndex:(1 + index++)];
 }
 
 - (PSSpecifier *)createToggleNameSpecifier {
@@ -201,20 +202,32 @@
 	return specifier;
 }
 
+- (PSSpecifier *)createConfirmationSpecifier {
+
+	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Ask for Confirmation" target:self set:@selector(setConfirmation:) get:@selector(isConfirmation) detail:Nil cell:PSSwitchCell edit:Nil];
+
+	[specifier setIdentifier:@"isConfirmation"];
+
+	return specifier;
+}
+
 - (void)updateToggle {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
-
-	[self.view endEditing:YES];
 
 	[self.toggleDict setObject:[prefs objectForKey:@"highlightColor"] forKey:@"highlightColor"];
 
 	[toggleList replaceObjectAtIndex:self.toggleIndex withObject:self.toggleDict];
 	[prefs setObject:toggleList forKey:@"toggleList"];
+}
 
+- (void)saveToggle {
+
+	[self.view endEditing:YES];
+
+	[self updateToggle];
 	[prefs removeObjectForKey:@"highlightColor"];
 
-	[self.specifier setName:[self.toggleDict objectForKey:@"name"]];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -227,6 +240,8 @@
 - (void)setName:(NSString *)name {
 
 	[self.toggleDict setObject:name forKey:@"name"];
+	[self.specifier setName:[self.toggleDict objectForKey:@"name"]];
+	[self updateToggle];
 }
 
 - (NSString *)getName {
@@ -237,6 +252,7 @@
 - (void)setGlyphName:(NSString *)glyphName {
 
 	[self.toggleDict setObject:glyphName forKey:@"glyphName"];
+	[self updateToggle];
 }
 
 - (NSString *)getGlyphName {
@@ -268,6 +284,7 @@
 
 	[self.toggleDict setObject:isSFSymbols forKey:@"isSFSymbols"];
 	[self reloadSpecifierAtIndex:3];
+	[self updateToggle];
 }
 
 - (NSNumber *)isSFSymbols {
@@ -278,6 +295,7 @@
 - (void)setSFSymbolsSize:(NSNumber *)sfSymbolsSize {
 
 	[self.toggleDict setObject:sfSymbolsSize forKey:@"sfSymbolsSize"];
+	[self updateToggle];
 }
 
 - (NSString *)getSFSymbolsSize {
@@ -288,6 +306,7 @@
 - (void)setSFSymbolsWeight:(NSNumber *)sfSymbolsWeight {
 
 	[self.toggleDict setObject:sfSymbolsWeight forKey:@"sfSymbolsWeight"];
+	[self updateToggle];
 }
 
 - (NSNumber *)getSFSymbolsWeight {
@@ -298,6 +317,7 @@
 - (void)setSFSymbolsScale:(NSNumber *)sfSymbolsScale {
 
 	[self.toggleDict setObject:sfSymbolsScale forKey:@"sfSymbolsScale"];
+	[self updateToggle];
 }
 
 - (NSNumber *)getSFSymbolsScale {
@@ -311,11 +331,23 @@
 
 	[self.toggleDict setObject:isHighlightColor forKey:@"isHighlightColor"];
 	[self reloadSpecifierID:@"highlightColor"];
+	[self updateToggle];
 }
 
 - (NSNumber *)isHighlightColor {
 
 	return [self.toggleDict objectForKey:@"isHighlightColor"];
+}
+
+- (void)setConfirmation:(NSNumber *)isConfirmation {
+
+	[self.toggleDict setObject:isConfirmation forKey:@"isConfirmation"];
+	[self updateToggle];
+}
+
+- (NSNumber *)isConfirmation {
+
+	return [self.toggleDict objectForKey:@"isConfirmation"];
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {

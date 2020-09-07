@@ -47,15 +47,15 @@
 - (void)addToggleAlert {
 
 	UIAlertController *addToggleAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle" message:@"Choose a name for your toggle" preferredStyle:UIAlertControllerStyleAlert];	
-	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		PSSpecifier *specifier = [self addToggleSpecifier:[addToggleAlert.textFields[0] text]];
 		[self saveToggle:specifier];
 	}];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
 
 	[addToggleAlert addTextFieldWithConfigurationHandler:^(UITextField *tf){}];
-	[addToggleAlert addAction:addAction];
 	[addToggleAlert addAction:cancelAction];
+	[addToggleAlert addAction:addAction];
 
 	[self presentViewController:addToggleAlert animated:YES completion:nil];
 }
@@ -93,6 +93,7 @@
 	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
 	[toggle setObject:[UIColor PF_hexFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
+	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
 	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
 	
 

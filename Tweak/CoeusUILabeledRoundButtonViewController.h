@@ -8,10 +8,12 @@
 
 @interface CoeusUILabeledRoundButtonViewController : CCUILabeledRoundButtonViewController
 
+@property (nonatomic, assign) NSDictionary *toggleDict;
+
 @property (nonatomic, retain) CoeusLAEvent *event;
 @property (nonatomic, retain) LAEvent *LAEvent;
 @property (nonatomic, retain) NSString *listenerName;
 
-- (id)initWithToggle:(NSDictionary *)toggle;
+- (id)initWithToggle:(NSDictionary *)toggleDict;
 
 @end

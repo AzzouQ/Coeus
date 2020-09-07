@@ -2,20 +2,20 @@
 
 @implementation CoeusLAEvent
 
-- (instancetype)initWithToggle:(NSDictionary *)toggle {
+- (instancetype)initWithToggle:(NSDictionary *)toggleDict {
 
 	if (!(self = [super init])) {
 		return self;
 	}
 	
-	self.toggle = toggle;
-	[LASharedActivator registerEventDataSource:self forEventName:[self.toggle objectForKey:@"eventIdentifier"]];
+	self.toggleDict = toggleDict;
+	[LASharedActivator registerEventDataSource:self forEventName:[self.toggleDict objectForKey:@"eventIdentifier"]];
 
 	return self;
 }
 
 - (void)dealloc {
-	[LASharedActivator unregisterEventDataSourceWithEventName:[self.toggle objectForKey:@"eventIdentifier"]];
+	[LASharedActivator unregisterEventDataSourceWithEventName:[self.toggleDict objectForKey:@"eventIdentifier"]];
 	[super dealloc];
 }
 
@@ -24,7 +24,7 @@
 }
 
 - (NSString *)localizedTitleForEventName:(NSString *)eventName {
-	return [self.toggle objectForKey:@"name"];
+	return [self.toggleDict objectForKey:@"name"];
 }
 
 - (NSString *)localizedDescriptionForEventName:(NSString *)eventName {
