@@ -1,13 +1,17 @@
+#import <libcolorpicker.h>
+
 #import "CoeusRootListController.h"
 #import "CoeusToggleController.h"
 
 @interface PSEditableListController : PSListController
+- (void)editDoneTapped;
+- (BOOL)editable;
 @end
 
 @interface CoeusToggleListController : PSEditableListController
 
 - (void)loadSpecifierFromToggleList;
-- (PSSpecifier *)addToggleSpecifier:(NSString *)name;
+- (PSSpecifier *)createToggleSpecifier:(NSString *)name;
 
 - (void)addToggleAlert;
 - (void)removeToggle:(PSSpecifier *)specifier;

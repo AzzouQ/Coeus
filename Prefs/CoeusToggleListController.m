@@ -1,10 +1,15 @@
 #import "CoeusToggleListController.h"
 
-#import <libcolorpicker.h>
-
-#define INDEX_TOGGLE ([self indexOfSpecifier:specifier] - 3)
-
 @implementation CoeusToggleListController
+
+- (id)specifiers {
+
+	if (_specifiers == nil) {
+		_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
+	}
+
+	return _specifiers;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -13,34 +18,32 @@
 	[self reload];
 }
 
-- (id)specifiers {
+- (void)viewDidLoad {
 
-	if (_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
-	}
+	[super viewDidLoad];
 
 	[self loadSpecifierFromToggleList];
-
-	return _specifiers;
+	[self reload];
 }
 
 - (void)loadSpecifierFromToggleList {
 
 	NSArray *toggleList = [prefs objectForKey:@"toggleList"];
+	NSMutableArray *specifierList = [[NSMutableArray alloc] init];
 
 	for (NSDictionary *toggle in toggleList) {
-		[self addToggleSpecifier:[toggle objectForKey:@"name"]];
+		[specifierList addObject:[self createToggleSpecifier:[toggle objectForKey:@"name"]]];
 	}
+	[self insertContiguousSpecifiers:specifierList atEndOfGroup:1];
 }
 
-- (PSSpecifier *)addToggleSpecifier:(NSString *)name {
+- (PSSpecifier *)createToggleSpecifier:(NSString *)name {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name target:self set:NULL get:NULL detail:NSClassFromString(@"CoeusToggleController") cell:PSLinkCell edit:Nil];
 
 	[specifier setButtonAction:@selector(setToggleController:)];
 	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:@"deletionAction"];
 
-	[self addSpecifier:specifier];
 	return specifier;
 }
 
@@ -49,8 +52,7 @@
 	UIAlertController *addToggleAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle" message:@"Choose a name for your toggle" preferredStyle:UIAlertControllerStyleAlert];	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		PSSpecifier *specifier = [self addToggleSpecifier:[addToggleAlert.textFields[0] text]];
-		[self saveToggle:specifier];
+		[self saveToggle:[self createToggleSpecifier:[addToggleAlert.textFields[0] text]]];
 	}];
 
 	[addToggleAlert addTextFieldWithConfigurationHandler:^(UITextField *tf){}];
@@ -64,7 +66,7 @@
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	[toggleList removeObjectAtIndex:INDEX_TOGGLE];
+	[toggleList removeObjectAtIndex:[self indexPathForSpecifier:specifier].row];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
@@ -79,6 +81,8 @@
 	[toggleList addObject:[self initToggleWithSpecifier:specifier]];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
+
+	[self insertSpecifier:specifier atEndOfGroup:1];
 }
 
 - (NSMutableDictionary *)initToggleWithSpecifier:(PSSpecifier *)specifier {
@@ -96,7 +100,6 @@
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
 	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
 	
-
 	return toggle;
 }
 
@@ -118,7 +121,7 @@
 
 - (void)setToggleController:(PSSpecifier *)specifier {
 
-	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:INDEX_TOGGLE];
+	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:[self indexPathForSpecifier:specifier].row];
 
 	[self.navigationController pushViewController:toggleController animated:YES];
 }
@@ -131,7 +134,13 @@
 	[toggleList removeObject:toggle];
 	[toggleList insertObject:toggle atIndex:toIndex.row];
 
+	PSSpecifier *specifier = [self specifierAtIndexPath:atIndex];
+	[self removeSpecifier:specifier];
+	[self insertSpecifier:specifier atIndex:[self indexForIndexPath:toIndex]];
+
 	[prefs setObject:toggleList forKey:@"toggleList"];
+
+	[self reload];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
@@ -142,6 +151,17 @@
 - (BOOL)shouldReloadSpecifiersOnResume {
 
 	return NO;
+}
+
+- (void)editDoneTapped {
+
+	NSArray *specifierList = [self specifiersInGroup:1];
+
+	[super editDoneTapped];
+
+	for (PSSpecifier *specifier in specifierList) {
+		[specifier setButtonAction:([self editable] ? Nil : @selector(setToggleController:))];
+	}
 }
 
 @end

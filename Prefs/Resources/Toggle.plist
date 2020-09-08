@@ -17,6 +17,26 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
+			<string>Actions</string>
+			<key>footerText</key>
+			<string>This setting will allow the toggle to be tapped anywhere. For more control over this behavior, use Activator's preferences.
+Some actions doesn't automaticaly dismiss the Control Center. You can assign 'Activate Control Center' in addition to your action to mimic this behavior.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Activator</string>
+			<key>id</key>
+			<string>activatorAction</string>
+			<key>action</key>
+			<string>setActivatorAction</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
 			<string>Glyph</string>
 		</dict>
 
@@ -25,6 +45,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Colors</string>
+			<key>id</key>
+			<string>colorGroup</string>
 			<key>footerText</key>
 			<string>You will need to press 'Save' to save theses changes.</string>
 		</dict>
@@ -52,24 +74,6 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Others</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Actions</string>
-			<key>footerText</key>
-			<string>This setting will allow the toggle to be tapped anywhere.
-For more control over this behavior, use Activator's preferences.</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>label</key>
-			<string>Activator</string>
-			<key>action</key>
-			<string>setActivatorAction</string>
 		</dict>
 
 	</array>
