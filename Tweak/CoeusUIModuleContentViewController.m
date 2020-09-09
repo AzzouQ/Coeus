@@ -89,10 +89,6 @@ static const int scrollToPageExtanded = 0;
 	}
 }
 
-- (void)viewDidLoad {
-
-	[super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -108,16 +104,14 @@ static const int scrollToPageExtanded = 0;
     uname(&systemInfo);
 
     NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-	NSUInteger multiplier = 0;
+	NSInteger moduleSize = ([deviceModel containsString:@"iPad"] ? 69 : 69);
+	NSInteger moduleSpace = 15;
 
-	if ([deviceModel containsString:@"iPhone"]) {
-		multiplier = 40;
-	} else if ([deviceModel containsString:@"iPad"]) {
-		multiplier = 45;
-	}
+	[prefs registerUnsignedInteger:&widthExpanded default:4 forKey:@"widthExpanded"];
+	[prefs registerUnsignedInteger:&heightExpanded default:5 forKey:@"heightExpanded"];
 
-	_preferredExpandedContentWidth = self.view.bounds.size.width;
-	_preferredExpandedContentHeight = multiplier + (((isLabelsExpanded ? self.toggleSizeWithLabels.height : self.toggleSizeWithoutLabels.height) + multiplier) * rowExpanded);
+	_preferredExpandedContentWidth = (moduleSize * widthExpanded) + (moduleSpace * (widthExpanded - 1));
+	_preferredExpandedContentHeight = (moduleSize * heightExpanded) + ((moduleSpace * heightExpanded) + 10);
 }
 
 - (void)initLayout {

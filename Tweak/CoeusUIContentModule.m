@@ -17,10 +17,10 @@
 
 - (CCUILayoutSize)moduleSizeForOrientation:(int)orientation {
 
-	[prefs registerUnsignedInteger:&moduleWidth default:4 forKey:@"moduleWidth"];
-	[prefs registerUnsignedInteger:&moduleHeight default:1 forKey:@"moduleHeight"];
+	[prefs registerUnsignedInteger:&widthCollapsed default:4 forKey:@"widthCollapsed"];
+	[prefs registerUnsignedInteger:&heightCollapsed default:1 forKey:@"heightCollapsed"];
 
-	return (CCUILayoutSize){ moduleWidth, moduleHeight};
+	return (CCUILayoutSize){ widthCollapsed, heightCollapsed};
 }
 
 

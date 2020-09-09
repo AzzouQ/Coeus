@@ -4,11 +4,11 @@
 
 - (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggleIndex:(NSInteger)toggleIndex {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-
 	if (!(self = [super init])) {
 		return self;
 	}
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveToggle)];
 	self.specifier = specifier;
