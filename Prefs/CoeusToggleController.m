@@ -22,9 +22,23 @@
 	[self createSFSymbolsNameSpecifier], nil];
 	[self.sfSymbolsSpecifiers addObjectsFromArray:[self loadSpecifiersFromPlistName:@"SFSymbols" target:self]];
 
+	[self compatibilityCheck];
+
 	[prefs setObject:[self.toggleDict objectForKey:@"highlightColor"] forKey:@"highlightColor"];
 
 	return self;
+}
+
+- (void)compatibilityCheck {
+
+	if (!([self.toggleDict objectForKey:@"isHighlightColor"]))
+		[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
+
+	if (!([self.toggleDict objectForKey:@"highlightColor"]))
+		[toggle setObject:[UIColor PF_hexFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
+
+	if (!([self.toggleDict objectForKey:@"isConfirmation"]))
+		[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
 }
 
 - (id)specifiers {
