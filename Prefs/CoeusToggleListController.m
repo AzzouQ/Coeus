@@ -107,12 +107,12 @@
 
 	NSMutableArray *toggleList = [prefs objectForKey:@"toggleList"];
 	NSInteger newID = 0;
-	NSInteger tempID = 0;
+	NSInteger oldID = 0;
 
 	for (NSDictionary *toggleDict in toggleList) {
-		tempID = [[[[toggleDict objectForKey:@"eventIdentifier"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
-		if (tempID > newID) {
-			newID = tempID; 
+		oldID = [[[[toggleDict objectForKey:@"eventIdentifier"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
+		if (oldID > newID) {
+			newID = oldID; 
 		}
 	}
 
