@@ -3,6 +3,10 @@
 #import "CoeusRootListController.h"
 #import "CoeusToggleController.h"
 
+@interface PSListController ()
+- (void)_moveSpecifierAtIndex:(unsigned long long)arg1 toIndex:(unsigned long long)arg2 animated:(bool)arg3;
+@end
+
 @interface PSEditableListController : PSListController
 - (void)editDoneTapped;
 - (BOOL)editable;

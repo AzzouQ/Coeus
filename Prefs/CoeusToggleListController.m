@@ -129,18 +129,16 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)atIndex toIndexPath:(NSIndexPath *)toIndex {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
-	NSMutableDictionary *toggle = [[toggleList objectAtIndex:atIndex.row] mutableCopy];
+	NSDictionary *toggle = [toggleList objectAtIndex:atIndex.row];
 
 	[toggleList removeObject:toggle];
 	[toggleList insertObject:toggle atIndex:toIndex.row];
 
-	PSSpecifier *specifier = [self specifierAtIndexPath:atIndex];
-	[self removeSpecifier:specifier];
-	[self insertSpecifier:specifier atIndex:[self indexForIndexPath:toIndex]];
+	[self _moveSpecifierAtIndex:[self indexForIndexPath:atIndex] toIndex:[self indexForIndexPath:toIndex] animated:NO];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 
-	[self reload];
+	[tableView reloadData];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
