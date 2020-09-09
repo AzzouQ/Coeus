@@ -1,4 +1,5 @@
 #import <libactivator/libactivator.h>
+#import <libcolorpicker.h>
 
 #import "CoeusRootListController.h"
 
