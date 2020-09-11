@@ -96,7 +96,7 @@
 	[toggle setObject:[NSNumber numberWithInteger:4] forKey:@"sfSymbolsWeight"];
 	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
-	[toggle setObject:[UIColor PF_hexFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
+	[toggle setObject:[UIColor cscp_hexStringFromColor:[UIColor systemBlueColor] alpha:YES] forKey:@"highlightColor"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
 	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
 	

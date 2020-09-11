@@ -20,7 +20,9 @@
 	[self createSFSymbolsWeightSpecifier],
 	[self createSFSymbolsScaleSpecifier],
 	[self createSFSymbolsNameSpecifier], nil];
-	[self.sfSymbolsSpecifiers addObjectsFromArray:[self loadSpecifiersFromPlistName:@"SFSymbols" target:self]];
+	[self.sfSymbolsSpecifiers addObjectsFromArray:[[self loadSpecifiersFromPlistName:@"SFSymbols" target:self] retain]];
+
+	self.highlightColorSpecifiers = [[NSMutableArray alloc] initWithArray:[[self loadSpecifiersFromPlistName:@"ColorCell" target:self] retain]];
 
 	[prefs setObject:[self.toggleDict objectForKey:@"highlightColor"] forKey:@"highlightColor"];
 
@@ -58,7 +60,8 @@
 			[self insertContiguousSpecifiers:self.sfSymbolsSpecifiers atEndOfGroup:2];
 		}
 	}
-	[self insertSpecifier:[self createHighlightColorSpecifier] afterSpecifierID:@"colorGroup"];
+	[self insertSpecifier:[self createHighlightColorSpecifier] atEndOfGroup:3];
+	[self insertSpecifier:([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/Alderis.framework"] ? [self.highlightColorSpecifiers firstObject] : [self.highlightColorSpecifiers lastObject]) atEndOfGroup:3];
 	[[self specifierForID:@"highlightColor"] setProperty:@([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue]) forKey:@"enabled"];
 	[self insertSpecifier:[self createConfirmationSpecifier] atEndOfGroup:4];
 }
@@ -226,6 +229,7 @@
 
 - (void)updateToggle {
 
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
 	[self.toggleDict setObject:[prefs objectForKey:@"highlightColor"] forKey:@"highlightColor"];

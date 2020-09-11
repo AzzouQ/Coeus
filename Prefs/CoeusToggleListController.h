@@ -1,4 +1,4 @@
-#import <libcolorpicker.h>
+#include <CSColorPicker/CSColorPicker.h>
 
 #import "CoeusRootListController.h"
 #import "CoeusToggleController.h"

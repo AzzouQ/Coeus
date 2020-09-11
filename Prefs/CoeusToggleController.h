@@ -1,5 +1,4 @@
 #import <libactivator/libactivator.h>
-#import <libcolorpicker.h>
 
 #import "CoeusRootListController.h"
 
@@ -7,7 +6,8 @@
 
 @property (nonatomic, assign) NSInteger				toggleIndex;
 @property (nonatomic, assign) NSMutableDictionary	*toggleDict;
-@property (nonatomic, assign) NSMutableArray		*sfSymbolsSpecifiers;
+@property (nonatomic, retain) NSMutableArray		*sfSymbolsSpecifiers;
+@property (nonatomic, retain) NSMutableArray		*highlightColorSpecifiers;
 
 - (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggleIndex:(NSInteger)toggleIndex;
 

@@ -1,5 +1,7 @@
 #import <libactivator/libactivator.h>
 
+#import "CoeusPreferences.h"
+
 @interface CoeusLAEvent : NSObject <LAEventDataSource>
 
 @property (nonatomic, assign) NSDictionary *toggleDict;

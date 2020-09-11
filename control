@@ -6,5 +6,5 @@ Description: An awesome Control Center module!
 Maintainer: Azzou
 Author: Azzou
 Section: Control Center (Modules)
-Depends: mobilesubstrate, firmware (>= 11), ws.hbang.common (= 1.15.1), libactivator, com.a3tweaks.flipswitch, com.opa334.ccsupport, ws.hbang.alderis
+Depends: mobilesubstrate, firmware (>= 11), ws.hbang.common (= 1.15.1), libactivator, com.a3tweaks.flipswitch, com.opa334.ccsupport, com.creaturesurvive.libcscolorpicker
 Icon: https://raw.githubusercontent.com/AzzouDuGhetto/Coeus/master/Prefs/Resources/Coeus.png

@@ -7,7 +7,7 @@
 	self.toggleDict = toggleDict;
 
 	UIImage *image = nil;
-	UIColor *color = ([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue] ? LCPParseColorString([self.toggleDict objectForKey:@"highlightColor"], nil) : [UIColor systemBlueColor]);
+	UIColor *color = ([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue] ? [UIColor cscp_colorFromHexString:[self.toggleDict objectForKey:@"highlightColor"]] : [UIColor systemBlueColor]);
 
 	if ([[self.toggleDict objectForKey:@"isSFSymbols"] boolValue]) {
 		if (@available(iOS 13.0, *)) {
