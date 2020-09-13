@@ -13,63 +13,45 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Module Size</string>
+			<string>Collapsed Size</string>
 			<key>footerText</key>
 			<string>Respring is required to take effect.</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Height</string>
-			<key>key</key>
-			<string>moduleHeight</string>
-			<key>default</key>
-			<real>1</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Width</string>
-			<key>key</key>
-			<string>moduleWidth</string>
-			<key>default</key>
-			<real>4</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
 			<key>label</key>
-			<string>Dark slider indicator</string>
+			<string>Width: %i</string>
 			<key>key</key>
-			<string>isIndicatorDark</string>
+			<string>widthCollapsed</string>
 			<key>default</key>
-			<false/>
+			<real>4</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>4</real>
+			<key>singularLabel</key>
+			<string>Width: 1</string>
 			<key>defaults</key>
 			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>Height: %i</string>
+			<key>key</key>
+			<string>heightCollapsed</string>
+			<key>default</key>
+			<real>1</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>5</real>
+			<key>singularLabel</key>
+			<string>Height: 1</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 		</dict>
 
 		<dict>
@@ -79,32 +61,10 @@
 			<string>Collapsed Layout</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Height</string>
-			<key>key</key>
-			<string>rowCollapsed</string>
-			<key>default</key>
-			<real>1</real>
-			<key>min</key>
-			<real>1</real>
-			<key>max</key>
-			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.azzou.coeusprefs</string>
-			<key>PostNotification</key>
-			<string>com.azzou.coeusprefs/ReloadPrefs</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Width</string>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>%i columns</string>
 			<key>key</key>
 			<string>columnCollapsed</string>
 			<key>default</key>
@@ -113,10 +73,28 @@
 			<real>1</real>
 			<key>max</key>
 			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
+			<key>singularLabel</key>
+			<string>1 column</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>%i rows</string>
+			<key>key</key>
+			<string>rowCollapsed</string>
+			<key>default</key>
+			<real>1</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>5</real>
+			<key>singularLabel</key>
+			<string>1 row</string>
 			<key>defaults</key>
 			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
@@ -126,7 +104,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>label</key>
-			<string>Paging</string>
+			<string>Use paging</string>
 			<key>key</key>
 			<string>isPagingCollapsed</string>
 			<key>default</key>
@@ -169,35 +147,62 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Expanded Layout</string>
+			<string>Expanded Size</string>
+			<key>footerText</key>
+			<string>Respring is required to take effect.</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Height</string>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>Width: %i</string>
 			<key>key</key>
-			<string>rowExpanded</string>
+			<string>widthExpanded</string>
 			<key>default</key>
-			<real>3</real>
+			<real>4</real>
 			<key>min</key>
-			<real>1</real>
+			<real>2</real>
 			<key>max</key>
-			<real>5</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
+			<real>4</real>
+			<key>singularLabel</key>
+			<string>Width: 1</string>
 			<key>defaults</key>
 			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
 			<string>com.azzou.coeusprefs/ReloadPrefs</string>
 		</dict>
 		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>Height: %i</string>
+			<key>key</key>
+			<string>heightExpanded</string>
+			<key>default</key>
+			<real>5</real>
+			<key>min</key>
+			<real>2</real>
+			<key>max</key>
+			<real>5</real>
+			<key>singularLabel</key>
+			<string>Height: 1</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+
+		<dict>
 			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>leftImage</key>
-			<string>Width</string>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Expanded Layout</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>%i columns</string>
 			<key>key</key>
 			<string>columnExpanded</string>
 			<key>default</key>
@@ -206,10 +211,28 @@
 			<real>1</real>
 			<key>max</key>
 			<real>4</real>
-			<key>showValue</key>
-			<false/>
-			<key>isSegmented</key>
-			<true/>
+			<key>singularLabel</key>
+			<string>1 column</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>%i rows</string>
+			<key>key</key>
+			<string>rowExpanded</string>
+			<key>default</key>
+			<real>3</real>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>5</real>
+			<key>singularLabel</key>
+			<string>1 row</string>
 			<key>defaults</key>
 			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
@@ -219,7 +242,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>label</key>
-			<string>Paging</string>
+			<string>Use paging</string>
 			<key>key</key>
 			<string>isPagingExpanded</string>
 			<key>default</key>
@@ -264,6 +287,27 @@
 			<string>Scroll Verticaly</string>
 			<key>key</key>
 			<string>isScrollVertical</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+			<key>PostNotification</key>
+			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Others</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Dark slider indicator</string>
+			<key>key</key>
+			<string>isIndicatorDark</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>

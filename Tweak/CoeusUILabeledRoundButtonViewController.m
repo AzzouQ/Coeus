@@ -70,7 +70,7 @@
 - (void)useConfirmation:(id)arg1 {
 
 	UIAlertController*buttonTappedAlert = [UIAlertController alertControllerWithTitle:[self.toggleDict objectForKey:@"name"] message:@"Are you sure to continue ?" preferredStyle:UIAlertControllerStyleAlert];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDestructive handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self performButtonTapped:arg1];
 	}];

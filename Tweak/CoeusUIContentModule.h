@@ -3,8 +3,8 @@
 #import "CoeusUIModuleContentViewController.h"
 
 typedef struct {
-	unsigned long long width;
-	unsigned long long height;
+	NSUInteger width;
+	NSUInteger height;
 } CCUILayoutSize;
 
 @interface CoeusUIContentModule : NSObject <CCUIContentModule>

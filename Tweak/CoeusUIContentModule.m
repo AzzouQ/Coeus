@@ -1,3 +1,5 @@
+#include <CSColorPicker/CSColorPicker.h>
+
 #import "CoeusUIContentModule.h"
 
 @implementation CoeusUIContentModule
@@ -9,6 +11,7 @@
 	}
 	
 	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+	[self compatibilityCheck];
 
 	_contentViewController = [[CoeusUIModuleContentViewController alloc] init];
 
@@ -17,11 +20,35 @@
 
 - (CCUILayoutSize)moduleSizeForOrientation:(int)orientation {
 
-	[prefs registerUnsignedInteger:&moduleWidth default:4 forKey:@"moduleWidth"];
-	[prefs registerUnsignedInteger:&moduleHeight default:1 forKey:@"moduleHeight"];
+	[prefs registerUnsignedInteger:&widthCollapsed default:4 forKey:@"widthCollapsed"];
+	[prefs registerUnsignedInteger:&heightCollapsed default:1 forKey:@"heightCollapsed"];
 
-	return (CCUILayoutSize){ moduleWidth, moduleHeight};
+	return (CCUILayoutSize){ widthCollapsed, heightCollapsed};
 }
 
+- (void)compatibilityCheck {
+
+	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
+
+	for (NSInteger index = 0; index < [toggleList count]; index++) {
+		NSMutableDictionary *toggleDict = [toggleList[index] mutableCopy];
+
+		if (!([toggleDict objectForKey:@"isHighlightColor"])) {
+			[toggleDict setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
+		}
+
+		if (!([toggleDict objectForKey:@"highlightColor"])) {
+			[toggleDict setObject:[UIColor cscp_hexStringFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
+		}
+
+		if (!([toggleDict objectForKey:@"isConfirmation"])) {
+			[toggleDict setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
+		}
+
+		[toggleList replaceObjectAtIndex:index withObject:toggleDict];
+	}
+
+	[prefs setObject:toggleList forKey:@"toggleList"];
+}
 
 @end

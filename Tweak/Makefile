@@ -19,5 +19,6 @@ $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = ControlCenterUIKit
 $(BUNDLE_NAME)_EXTRA_FRAMEWORKS += Cephei
 $(BUNDLE_NAME)_LDFLAGS += -lCSColorPicker
 $(BUNDLE_NAME)_INSTALL_PATH = /Library/ControlCenter/Bundles/
+$(BUNDLE_NAME)_LDFLAGS += -lCSColorPicker
 
 include $(THEOS_MAKE_PATH)/bundle.mk

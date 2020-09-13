@@ -12,6 +12,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL isExpanded;
 
+@property (nonatomic, assign) NSInteger toggleCount;
+
 @property (nonatomic, assign) CGSize toggleSizeWithoutLabels;
 @property (nonatomic, assign) CGSize toggleSizeWithLabels;
 @property (nonatomic, assign) BOOL isPaging;

@@ -136,6 +136,8 @@
 	[self _moveSpecifierAtIndex:[self indexForIndexPath:atIndex] toIndex:[self indexForIndexPath:toIndex] animated:NO];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
+
+	[tableView reloadData];
 }
 
 - (void)editDoneTapped {
@@ -155,6 +157,17 @@
 
 - (BOOL)shouldReloadSpecifiersOnResume {
 	return NO;
+}
+
+- (void)editDoneTapped {
+
+	NSArray *specifierList = [self specifiersInGroup:1];
+
+	[super editDoneTapped];
+
+	for (PSSpecifier *specifier in specifierList) {
+		[specifier setButtonAction:([self editable] ? Nil : @selector(setToggleController:))];
+	}
 }
 
 @end

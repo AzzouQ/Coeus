@@ -75,6 +75,8 @@
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"" target:self set:@selector(setName:) get:@selector(getName) detail:Nil cell:PSEditTextCell edit:Nil];
 	[specifier setIdentifier:@"name"];
 
+	[specifier setIdentifier:@"name"];
+
 	return specifier;
 }
 
@@ -112,12 +114,16 @@
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Use SF Symbols" target:self set:@selector(setSFSymbols:) get:@selector(isSFSymbols) detail:Nil cell:PSSwitchCell edit:Nil];
 	[specifier setIdentifier:@"isSFSymbols"];
 
+	[specifier setIdentifier:@"isSFSymbols"];
+
 	return specifier;
 }
 
 - (PSSpecifier *)createSFSymbolsSizeSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Size" target:self set:@selector(setSFSymbolsSize:) get:@selector(getSFSymbolsSize) detail:Nil cell:PSSliderCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsSize"];
+
 	[specifier setIdentifier:@"sfSymbolsSize"];
 
 	[specifier setProperty:[UIImage imageNamed:@"Size" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] forKey:@"leftImage"];
@@ -162,6 +168,8 @@
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Weight" target:self set:@selector(setSFSymbolsWeight:) get:@selector(getSFSymbolsWeight) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
 	[specifier setIdentifier:@"sfSymbolsWeight"];
 
+	[specifier setIdentifier:@"sfSymbolsWeight"];
+
 	specifier.values = sfSymbolsWeightValueList;
 	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsWeightNameList forKeys:specifier.values];
 	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsWeightNameList forKeys:specifier.values];
@@ -190,6 +198,8 @@
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Scale" target:self set:@selector(setSFSymbolsScale:) get:@selector(getSFSymbolsScale) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
 	[specifier setIdentifier:@"sfSymbolsScale"];
 
+	[specifier setIdentifier:@"sfSymbolsScale"];
+
 	specifier.values = sfSymbolsScaleValueList;
 	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsScaleNameList forKeys:specifier.values];
 	specifier.shortTitleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsScaleNameList forKeys:specifier.values];
@@ -200,6 +210,8 @@
 - (PSSpecifier *)createSFSymbolsNameSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Name" target:self set:@selector(setGlyphName:) get:@selector(getGlyphName) detail:Nil cell:PSEditTextCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsName"];
+
 	[specifier setIdentifier:@"sfSymbolsName"];
 
 	return specifier;
@@ -223,6 +235,7 @@
 
 - (void)updateToggle {
 
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
 	[self.toggleDict setObject:[prefs objectForKey:@"highlightColor"] forKey:@"highlightColor"];

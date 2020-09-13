@@ -15,6 +15,9 @@
 }
 
 - (void)dealloc {
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
+
 	[LASharedActivator unregisterEventDataSourceWithEventName:[self.toggleDict objectForKey:@"eventIdentifier"]];
 }
 

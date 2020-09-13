@@ -70,6 +70,8 @@ static const int scrollToPageExtanded = 0;
 
 	CoeusUILabeledRoundButtonViewController *toggle = Nil;
 
+	self.toggleCount = [toggleList count];
+
 	for (NSDictionary *toggleDict in toggleList) {
 		toggle = [[CoeusUILabeledRoundButtonViewController alloc] initWithToggle:toggleDict];
 
@@ -89,10 +91,6 @@ static const int scrollToPageExtanded = 0;
 	}
 }
 
-- (void)viewDidLoad {
-
-	[super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -108,16 +106,14 @@ static const int scrollToPageExtanded = 0;
     uname(&systemInfo);
 
     NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-	NSUInteger multiplier = 0;
+	NSInteger moduleSize = ([deviceModel containsString:@"iPad"] ? 69 : 69);
+	NSInteger moduleSpace = 15;
 
-	if ([deviceModel containsString:@"iPhone"]) {
-		multiplier = 40;
-	} else if ([deviceModel containsString:@"iPad"]) {
-		multiplier = 45;
-	}
+	[prefs registerUnsignedInteger:&widthExpanded default:4 forKey:@"widthExpanded"];
+	[prefs registerUnsignedInteger:&heightExpanded default:5 forKey:@"heightExpanded"];
 
-	_preferredExpandedContentWidth = self.view.bounds.size.width;
-	_preferredExpandedContentHeight = multiplier + (((isLabelsExpanded ? self.toggleSizeWithLabels.height : self.toggleSizeWithoutLabels.height) + multiplier) * rowExpanded);
+	_preferredExpandedContentWidth = (moduleSize * widthExpanded) + (moduleSpace * (widthExpanded - 1));
+	_preferredExpandedContentHeight = (moduleSize * heightExpanded) + ((moduleSpace * heightExpanded) + 10);
 }
 
 - (void)initLayout {
@@ -136,7 +132,7 @@ static const int scrollToPageExtanded = 0;
 		self.row = rowCollapsed;
 	}
 
-	self.toggleSize = (self.isLabels) ? self.toggleSizeWithLabels : self.toggleSizeWithoutLabels;
+	self.toggleSize = (self.isLabels ? self.toggleSizeWithLabels : self.toggleSizeWithoutLabels);
 	self.togglePage = self.column * self.row;
 	self.spaceWidth = GET_SPACE_WIDTH(self.scrollView.bounds.size.width, self.column, self.toggleSize.width);
 	self.spaceHeight = GET_SPACE_HEIGHT(self.scrollView.bounds.size.height, self.row, self.toggleSize.height);
@@ -152,7 +148,7 @@ static const int scrollToPageExtanded = 0;
 
 	int pageIndex = 0;
 
-	for (int i = 0; i < [toggleList count]; i++) {
+	for (int i = 0; i < self.toggleCount; i++) {
 		toggle = (CCUILabeledRoundButton *)self.scrollView.subviews[i];
 
 		if ((i) && IS_NEW_PAGE(i, self.togglePage)) {
@@ -195,18 +191,18 @@ static const int scrollToPageExtanded = 0;
 
 	if (self.isScrollVertical) {
 		if (self.isPaging) {
-			multiplier = GET_PAGE_TOTAL([toggleList count], self.togglePage);
+			multiplier = GET_PAGE_TOTAL(self.toggleCount, self.togglePage);
 			contentSize.height *= multiplier;
 		} else {
-			multiplier = GET_ROW_TOTAL([toggleList count], self.togglePage, self.row, self.column);
+			multiplier = GET_ROW_TOTAL(self.toggleCount, self.togglePage, self.row, self.column);
 			contentSize.height = self.spaceHeight + ((self.toggleSize.height + self.spaceHeight) * multiplier);
 		}
 	} else {
 		if (self.isPaging) {
-			multiplier = GET_PAGE_TOTAL([toggleList count], self.togglePage);
+			multiplier = GET_PAGE_TOTAL(self.toggleCount, self.togglePage);
 			contentSize.width *= multiplier;
 		} else {
-			multiplier = GET_COLUMN_TOTAL([toggleList count], self.togglePage, self.column);
+			multiplier = GET_COLUMN_TOTAL(self.toggleCount, self.togglePage, self.column);
 			contentSize.width = self.spaceWidth + ((self.toggleSize.width + self.spaceWidth) * multiplier);
 		}
 	}
