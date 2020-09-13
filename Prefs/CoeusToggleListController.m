@@ -159,15 +159,4 @@
 	return NO;
 }
 
-- (void)editDoneTapped {
-
-	NSArray *specifierList = [self specifiersInGroup:1];
-
-	[super editDoneTapped];
-
-	for (PSSpecifier *specifier in specifierList) {
-		[specifier setButtonAction:([self editable] ? Nil : @selector(setToggleController:))];
-	}
-}
-
 @end
