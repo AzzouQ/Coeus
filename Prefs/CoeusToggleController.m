@@ -4,11 +4,11 @@
 
 - (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggleIndex:(NSInteger)toggleIndex {
 
-	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
-
 	if (!(self = [super init])) {
 		return self;
 	}
+
+	prefs = [[HBPreferences alloc] initWithIdentifier:@"com.azzou.coeusprefs"];
 
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(saveToggle)];
 	self.specifier = specifier;
@@ -20,23 +20,11 @@
 	return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-
-	[super viewWillAppear:animated];
-
-	[[self specifierForID:@"highlightColor"] setProperty:@([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue]) forKey:@"enabled"];
-	[self insertSpecifier:[self createConfirmationSpecifier] atEndOfGroup:3];
-
-	[self reload];
-}
-
 - (id)specifiers {
 
 	if (_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"Toggle" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"Toggle" target:self];
 	}
-
-	[self loadSpecifiersFromToggle];
 
 	[self setTitle:[self.specifier name]];
 	[self.navigationItem setTitle:[self.specifier name]];
@@ -44,29 +32,48 @@
 	return _specifiers;
 }
 
-- (void)loadSpecifiersFromToggle {
+- (void)viewDidLoad {
 
-	NSUInteger index = 4;
+	[super viewDidLoad];
 
-	[self insertSpecifier:[self createToggleNameSpecifier] atIndex:1];
-	[self insertSpecifier:[self createGlyphListSpecifier] atIndex:3];
-	if (@available(iOS 13.0, *)) {
-		[self insertSpecifier:[self createSFSymbolsSpecifier] atIndex:index++];
-		if ([[self.toggleDict objectForKey:@"isSFSymbols"] boolValue]) {
-			[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
-			[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:index++];
-			[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:index++];
-			[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:index++];
-			[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:index++];
-			[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"SFSymbols" target:self] retain] atIndex:index++];
-		}
-	}
-	[self insertSpecifier:[self createHighlightColorSpecifier] atIndex:(1 + index++)];
+	[self loadSpecifiersFromToggle];
+	[self reload];
 }
 
-- (PSSpecifier *)createToggleNameSpecifier {
+- (void)loadSpecifiersFromToggle {
+
+	if (@available(iOS 13.0, *)) {
+		self.sfSymbolsSpecifiers = [[NSMutableArray alloc] initWithObjects:
+		[self createSFSymbolsSizeSpecifier],
+		[self createSFSymbolsWeightSpecifier],
+		[self createSFSymbolsScaleSpecifier],
+		[self createSFSymbolsNameSpecifier], nil];
+		[self.sfSymbolsSpecifiers addObjectsFromArray:[self loadSpecifiersFromPlistName:@"SFSymbols" target:self]];
+	}
+
+	[self insertSpecifier:[self createNameSpecifier] atEndOfGroup:0];
+	[self insertSpecifier:[self createGlyphListSpecifier] atEndOfGroup:2];
+	if (@available(iOS 13.0, *)) {
+		[self insertSpecifier:[self createSFSymbolsSpecifier] atEndOfGroup:2];
+		if ([[self.toggleDict objectForKey:@"isSFSymbols"] boolValue]) {
+			[[self specifierForID:@"glyphList"] setProperty:@NO forKey:@"enabled"];
+			[self insertContiguousSpecifiers:self.sfSymbolsSpecifiers atEndOfGroup:2];
+		}
+	}
+	NSArray *colorCell = [[NSArray alloc] initWithArray:[self loadSpecifiersFromPlistName:@"ColorCell" target:self]];
+	[self insertSpecifier:[self createHighlightColorSpecifier] atEndOfGroup:3];
+	[self insertSpecifier:([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/Alderis.framework"] ? [colorCell firstObject] : [colorCell lastObject]) atEndOfGroup:3];
+	[[self specifierForID:@"highlightColor"] setProperty:@([[self.toggleDict objectForKey:@"isHighlightColor"] boolValue]) forKey:@"enabled"];
+	[self insertSpecifier:[self createConfirmationSpecifier] atEndOfGroup:4];
+
+	[self setTitle:[self.specifier name]];
+	[self.navigationItem setTitle:[self.specifier name]];
+}
+
+- (PSSpecifier *)createNameSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"" target:self set:@selector(setName:) get:@selector(getName) detail:Nil cell:PSEditTextCell edit:Nil];
+	[specifier setIdentifier:@"name"];
 
 	return specifier;
 }
@@ -75,7 +82,7 @@
 
 	NSArray *glyphList = [self getGlyphList];
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Choose from preset" target:self set:@selector(setGlyphName:) get:@selector(getGlyphName) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
-
+	[specifier setIdentifier:@"glyphList"];
 	[specifier setProperty:@"Glyph are located in '/Library/ControlCenter/Bundles/Coeus.bundle/Glyphs/'" forKey:@"staticTextMessage"];
 
 	specifier.values = glyphList;
@@ -103,6 +110,7 @@
 - (PSSpecifier *)createSFSymbolsSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Use SF Symbols" target:self set:@selector(setSFSymbols:) get:@selector(isSFSymbols) detail:Nil cell:PSSwitchCell edit:Nil];
+	[specifier setIdentifier:@"isSFSymbols"];
 
 	return specifier;
 }
@@ -110,6 +118,7 @@
 - (PSSpecifier *)createSFSymbolsSizeSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Size" target:self set:@selector(setSFSymbolsSize:) get:@selector(getSFSymbolsSize) detail:Nil cell:PSSliderCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsSize"];
 
 	[specifier setProperty:[UIImage imageNamed:@"Size" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil] forKey:@"leftImage"];
 	[specifier setProperty:[NSNumber numberWithFloat:20.0] forKey:@"default"];
@@ -151,6 +160,7 @@
 	nil];
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Weight" target:self set:@selector(setSFSymbolsWeight:) get:@selector(getSFSymbolsWeight) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsWeight"];
 
 	specifier.values = sfSymbolsWeightValueList;
 	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsWeightNameList forKeys:specifier.values];
@@ -178,6 +188,7 @@
 	nil];
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Scale" target:self set:@selector(setSFSymbolsScale:) get:@selector(getSFSymbolsScale) detail:NSClassFromString(@"PSListItemsController") cell:PSLinkListCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsScale"];
 
 	specifier.values = sfSymbolsScaleValueList;
 	specifier.titleDictionary = [NSDictionary dictionaryWithObjects:sfSymbolsScaleNameList forKeys:specifier.values];
@@ -189,6 +200,7 @@
 - (PSSpecifier *)createSFSymbolsNameSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Name" target:self set:@selector(setGlyphName:) get:@selector(getGlyphName) detail:Nil cell:PSEditTextCell edit:Nil];
+	[specifier setIdentifier:@"sfSymbolsName"];
 
 	return specifier;
 }
@@ -196,7 +208,6 @@
 - (PSSpecifier *)createHighlightColorSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Custom Highlight" target:self set:@selector(setHighlightColor:) get:@selector(isHighlightColor) detail:Nil cell:PSSwitchCell edit:Nil];
-
 	[specifier setIdentifier:@"isHighlightColor"];
 
 	return specifier;
@@ -205,7 +216,6 @@
 - (PSSpecifier *)createConfirmationSpecifier {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:@"Ask for Confirmation" target:self set:@selector(setConfirmation:) get:@selector(isConfirmation) detail:Nil cell:PSSwitchCell edit:Nil];
-
 	[specifier setIdentifier:@"isConfirmation"];
 
 	return specifier;
@@ -245,7 +255,6 @@
 }
 
 - (NSString *)getName {
-
 	return [self.toggleDict objectForKey:@"name"];
 }
 
@@ -256,39 +265,25 @@
 }
 
 - (NSString *)getGlyphName {
-
 	return [self.toggleDict objectForKey:@"glyphName"];
 }
 
 - (void)setSFSymbols:(NSNumber *)isSFSymbols {
 
 	if ([isSFSymbols boolValue]) {
-		[[self specifierAtIndex:3] setProperty:@NO forKey:@"enabled"];
-		[self insertSpecifier:[self createSFSymbolsSizeSpecifier] atIndex:5 animated:YES];
-		[self insertSpecifier:[self createSFSymbolsWeightSpecifier] atIndex:6 animated:YES];
-		[self insertSpecifier:[self createSFSymbolsScaleSpecifier] atIndex:7 animated:YES];
-		[self insertSpecifier:[self createSFSymbolsNameSpecifier] atIndex:8 animated:YES];
-		[self insertContiguousSpecifiers:[[self loadSpecifiersFromPlistName:@"SFSymbols" target:self] retain] atIndex:9 animated:YES];
-
-		[self setTitle:[self.specifier name]];
-		[self.navigationItem setTitle:[self.specifier name]];
-
+		[[self specifierForID:@"glyphList"] setProperty:@NO forKey:@"enabled"];
+		[self insertContiguousSpecifiers:self.sfSymbolsSpecifiers atEndOfGroup:2 animated:YES];
 	} else {
-		[[self specifierAtIndex:3] setProperty:@YES forKey:@"enabled"];
-		[self removeSpecifierAtIndex:5 animated:YES];
-		[self removeSpecifierAtIndex:5 animated:YES];
-		[self removeSpecifierAtIndex:5 animated:YES];
-		[self removeSpecifierAtIndex:5 animated:YES];
-		[self removeSpecifierAtIndex:5 animated:YES];
+		[[self specifierForID:@"glyphList"] setProperty:@YES forKey:@"enabled"];
+		[self removeContiguousSpecifiers:self.sfSymbolsSpecifiers animated:YES];
 	}
 
 	[self.toggleDict setObject:isSFSymbols forKey:@"isSFSymbols"];
-	[self reloadSpecifierAtIndex:3];
+	[self reloadSpecifierID:@"glyphList" animated:YES];
 	[self updateToggle];
 }
 
 - (NSNumber *)isSFSymbols {
-
 	return [self.toggleDict objectForKey:@"isSFSymbols"];
 }
 
@@ -299,7 +294,6 @@
 }
 
 - (NSString *)getSFSymbolsSize {
-
 	return [self.toggleDict objectForKey:@"sfSymbolsSize"];
 }
 
@@ -310,7 +304,6 @@
 }
 
 - (NSNumber *)getSFSymbolsWeight {
-
 	return [self.toggleDict objectForKey:@"sfSymbolsWeight"];
 }
 
@@ -321,7 +314,6 @@
 }
 
 - (NSNumber *)getSFSymbolsScale {
-
 	return [self.toggleDict objectForKey:@"sfSymbolsScale"];
 }
 
@@ -330,12 +322,11 @@
 	[[self specifierForID:@"highlightColor"] setProperty:@([isHighlightColor boolValue]) forKey:@"enabled"];
 
 	[self.toggleDict setObject:isHighlightColor forKey:@"isHighlightColor"];
-	[self reloadSpecifierID:@"highlightColor"];
+	[self reloadSpecifierID:@"highlightColor" animated:YES];
 	[self updateToggle];
 }
 
 - (NSNumber *)isHighlightColor {
-
 	return [self.toggleDict objectForKey:@"isHighlightColor"];
 }
 
@@ -346,12 +337,10 @@
 }
 
 - (NSNumber *)isConfirmation {
-
 	return [self.toggleDict objectForKey:@"isConfirmation"];
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {
-
 	return NO;
 }
 

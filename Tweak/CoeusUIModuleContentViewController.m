@@ -228,7 +228,6 @@ static const int scrollToPageExtanded = 0;
 
 
 - (BOOL)_canShowWhileLocked {
-
 	return YES;
 }
 

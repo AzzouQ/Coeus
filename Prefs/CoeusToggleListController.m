@@ -1,10 +1,15 @@
 #import "CoeusToggleListController.h"
 
-#import <libcolorpicker.h>
-
-#define INDEX_TOGGLE ([self indexOfSpecifier:specifier] - 3)
-
 @implementation CoeusToggleListController
+
+- (id)specifiers {
+
+	if (_specifiers == nil) {
+		_specifiers = [self loadSpecifiersFromPlistName:@"ToggleList" target:self];
+	}
+
+	return _specifiers;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 
@@ -13,34 +18,32 @@
 	[self reload];
 }
 
-- (id)specifiers {
+- (void)viewDidLoad {
 
-	if (_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"ToggleList" target:self] retain];
-	}
+	[super viewDidLoad];
 
 	[self loadSpecifierFromToggleList];
-
-	return _specifiers;
+	[self reload];
 }
 
 - (void)loadSpecifierFromToggleList {
 
 	NSArray *toggleList = [prefs objectForKey:@"toggleList"];
+	NSMutableArray *specifierList = [[NSMutableArray alloc] init];
 
 	for (NSDictionary *toggle in toggleList) {
-		[self addToggleSpecifier:[toggle objectForKey:@"name"]];
+		[specifierList addObject:[self createToggleSpecifier:[toggle objectForKey:@"name"]]];
 	}
+	[self insertContiguousSpecifiers:specifierList atEndOfGroup:1];
 }
 
-- (PSSpecifier *)addToggleSpecifier:(NSString *)name {
+- (PSSpecifier *)createToggleSpecifier:(NSString *)name {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name target:self set:NULL get:NULL detail:NSClassFromString(@"CoeusToggleController") cell:PSLinkCell edit:Nil];
 
 	[specifier setButtonAction:@selector(setToggleController:)];
 	[specifier setProperty:NSStringFromSelector(@selector(removeToggle:)) forKey:@"deletionAction"];
 
-	[self addSpecifier:specifier];
 	return specifier;
 }
 
@@ -49,8 +52,7 @@
 	UIAlertController *addToggleAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle" message:@"Choose a name for your toggle" preferredStyle:UIAlertControllerStyleAlert];	
 	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
 	UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		PSSpecifier *specifier = [self addToggleSpecifier:[addToggleAlert.textFields[0] text]];
-		[self saveToggle:specifier];
+		[self saveToggle:[self createToggleSpecifier:[addToggleAlert.textFields[0] text]]];
 	}];
 
 	[addToggleAlert addTextFieldWithConfigurationHandler:^(UITextField *tf){}];
@@ -64,7 +66,7 @@
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 
-	[toggleList removeObjectAtIndex:INDEX_TOGGLE];
+	[toggleList removeObjectAtIndex:[self indexPathForSpecifier:specifier].row];
 
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
@@ -76,12 +78,13 @@
 		toggleList = [[NSMutableArray alloc] init];
 	}
 
-	[toggleList addObject:[self initToggleWithSpecifier:specifier]];
-
+	[toggleList addObject:[self createToggleWithSpecifier:specifier]];
 	[prefs setObject:toggleList forKey:@"toggleList"];
+
+	[self insertSpecifier:specifier atEndOfGroup:1];
 }
 
-- (NSMutableDictionary *)initToggleWithSpecifier:(PSSpecifier *)specifier {
+- (NSMutableDictionary *)createToggleWithSpecifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *toggle = [[NSMutableDictionary alloc] init];
 
@@ -92,10 +95,9 @@
 	[toggle setObject:[NSNumber numberWithInteger:4] forKey:@"sfSymbolsWeight"];
 	[toggle setObject:[NSNumber numberWithInteger:2] forKey:@"sfSymbolsScale"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isHighlightColor"];
-	[toggle setObject:[UIColor PF_hexFromColor:[UIColor systemBlueColor]] forKey:@"highlightColor"];
+	[toggle setObject:[UIColor cscp_hexStringFromColor:[UIColor systemBlueColor] alpha:YES] forKey:@"highlightColor"];
 	[toggle setObject:[NSNumber numberWithBool:NO] forKey:@"isConfirmation"];
 	[toggle setObject:[self getEventIdentifier] forKey:@"eventIdentifier"];
-	
 
 	return toggle;
 }
@@ -104,12 +106,12 @@
 
 	NSMutableArray *toggleList = [prefs objectForKey:@"toggleList"];
 	NSInteger newID = 0;
-	NSInteger tempID = 0;
+	NSInteger oldID = 0;
 
 	for (NSDictionary *toggleDict in toggleList) {
-		tempID = [[[[toggleDict objectForKey:@"eventIdentifier"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
-		if (tempID > newID) {
-			newID = tempID; 
+		oldID = [[[[toggleDict objectForKey:@"eventIdentifier"] componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""] integerValue];
+		if (oldID > newID) {
+			newID = oldID; 
 		}
 	}
 
@@ -118,7 +120,7 @@
 
 - (void)setToggleController:(PSSpecifier *)specifier {
 
-	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:INDEX_TOGGLE];
+	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:[self indexPathForSpecifier:specifier].row];
 
 	[self.navigationController pushViewController:toggleController animated:YES];
 }
@@ -126,21 +128,32 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)atIndex toIndexPath:(NSIndexPath *)toIndex {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
-	NSMutableDictionary *toggle = [[toggleList objectAtIndex:atIndex.row] mutableCopy];
+	NSDictionary *toggle = [toggleList objectAtIndex:atIndex.row];
 
 	[toggleList removeObject:toggle];
 	[toggleList insertObject:toggle atIndex:toIndex.row];
 
+	[self _moveSpecifierAtIndex:[self indexForIndexPath:atIndex] toIndex:[self indexForIndexPath:toIndex] animated:NO];
+
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
+- (void)editDoneTapped {
 
-   return YES;
+	NSArray *specifierList = [self specifiersInGroup:1];
+
+	[super editDoneTapped];
+
+	for (PSSpecifier *specifier in specifierList) {
+		[specifier setButtonAction:([self editable] ? Nil : @selector(setToggleController:))];
+	}
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
+	return YES;
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {
-
 	return NO;
 }
 

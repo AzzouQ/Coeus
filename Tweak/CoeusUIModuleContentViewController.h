@@ -9,7 +9,7 @@
 @property (nonatomic, readonly) CGFloat preferredExpandedContentWidth;
 @property (nonatomic, readonly) BOOL providesOwnPlatter;
 
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL isExpanded;
 
 @property (nonatomic, assign) CGSize toggleSizeWithoutLabels;

@@ -16,7 +16,7 @@
 	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,10,10)];
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-	self.titleLabel.text = @"1.0";
+	self.titleLabel.text = @"1.1";
 	self.titleLabel.textColor = [UIColor colorWithRed:0.96 green:0.77 blue:0.75 alpha:1.0];
 	self.titleLabel.textAlignment = NSTextAlignmentCenter;
 
@@ -47,7 +47,7 @@
 - (id)specifiers {
 
 	if (_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"Root" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
 	}
 
 	return _specifiers;
@@ -113,16 +113,16 @@
 - (void)reset {
 
 	UIAlertController *resetAlert = [UIAlertController alertControllerWithTitle:@"Coeus" message:@"Do you really want to reset preferences ?" preferredStyle:UIAlertControllerStyleActionSheet];
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Nah" style:UIAlertActionStyleCancel handler:nil];
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yeah" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		for (NSString *key in [prefs dictionaryRepresentation]) {
 			[prefs removeObjectForKey:key];
 		}
 		[self respring];
 	}];
 
-	[resetAlert addAction:confirmAction];
 	[resetAlert addAction:cancelAction];
+	[resetAlert addAction:confirmAction];
 
 	[self presentViewController:resetAlert animated:YES completion:nil];
 }

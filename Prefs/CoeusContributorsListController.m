@@ -14,14 +14,13 @@
 - (id)specifiers {
 
 	if (_specifiers == nil) {
-		_specifiers = [[self loadSpecifiersFromPlistName:@"Contributors" target:self] retain];
+		_specifiers = [self loadSpecifiersFromPlistName:@"Contributors" target:self];
 	}
 
 	return _specifiers;
 }
 
 - (BOOL)shouldReloadSpecifiersOnResume {
-
 	return NO;
 }
 

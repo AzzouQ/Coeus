@@ -16,7 +16,6 @@
 
 - (void)dealloc {
 	[LASharedActivator unregisterEventDataSourceWithEventName:[self.toggleDict objectForKey:@"eventIdentifier"]];
-	[super dealloc];
 }
 
 - (NSString *)localizedGroupForEventName:(NSString *)eventName {

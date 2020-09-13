@@ -4,14 +4,15 @@
 
 @interface CoeusToggleController : HBListController
 
-@property (nonatomic, assign) NSInteger             toggleIndex;
-@property (nonatomic, assign) NSMutableDictionary   *toggleDict;
+@property (nonatomic, assign) NSInteger				toggleIndex;
+@property (nonatomic, strong) NSMutableDictionary	*toggleDict;
+@property (nonatomic, strong) NSMutableArray		*sfSymbolsSpecifiers;
 
 - (instancetype)initWithSpecifier:(PSSpecifier *)specifier toggleIndex:(NSInteger)toggleIndex;
 
 - (void)loadSpecifiersFromToggle;
 
-- (PSSpecifier *)createToggleNameSpecifier;
+- (PSSpecifier *)createNameSpecifier;
 - (PSSpecifier *)createGlyphListSpecifier;
 - (PSSpecifier *)createSFSymbolsSpecifier;
 - (PSSpecifier *)createSFSymbolsWeightSpecifier;
