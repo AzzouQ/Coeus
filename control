@@ -7,5 +7,5 @@ Maintainer: Azzou
 Author: Azzou
 Section: Control Center (Modules)
 Depends: mobilesubstrate, firmware (>= 11), ws.hbang.common, libactivator, com.a3tweaks.flipswitch, com.opa334.ccsupport, com.creaturesurvive.libcscolorpicker
-Icon: https://github.com/AzzouDuGhetto/repo/blob/master/depictions/coeus/assets/icon.png
-SileoDepiction: https://github.com/AzzouDuGhetto/repo/blob/master/depictions/coeus/modernDepiction.json
+Icon: https://raw.githubusercontent.com/AzzouDuGhetto/repo/master/depictions/coeus/assets/icon.png
+SileoDepiction: https://raw.githubusercontent.com/AzzouDuGhetto/repo/master/depictions/coeus/modernDepiction.json
