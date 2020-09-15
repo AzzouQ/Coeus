@@ -59,6 +59,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Collapsed Layout</string>
+			<key>footerText</key>
+			<string>'-1' will show the last displayed page. '0' will show the first page, '1' the second one etc...</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -142,6 +144,24 @@
 			<key>PostNotification</key>
 			<string>com.azzou.coeusprefs/ReloadPrefs</string>
 		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>Scroll to page %i by default</string>
+			<key>key</key>
+			<string>scrollToCollapsed</string>
+			<key>default</key>
+			<real>1</real>
+			<key>min</key>
+			<real>-1</real>
+			<key>max</key>
+			<real>10</real>
+			<key>singularLabel</key>
+			<string>Scroll to page 1 by default</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
+		</dict>
 
 		<dict>
 			<key>cell</key>
@@ -197,6 +217,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Expanded Layout</string>
+			<key>footerText</key>
+			<string>'-1' will show the page containing toggles from the collapsed page. '0' will show the first page, '1' the second one etc...</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -293,6 +315,24 @@
 			<string>com.azzou.coeusprefs</string>
 			<key>PostNotification</key>
 			<string>com.azzou.coeusprefs/ReloadPrefs</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>HBStepperTableCell</string>
+			<key>label</key>
+			<string>Scroll to page %i by default</string>
+			<key>key</key>
+			<string>scrollToExpanded</string>
+			<key>default</key>
+			<real>1</real>
+			<key>min</key>
+			<real>-1</real>
+			<key>max</key>
+			<real>10</real>
+			<key>singularLabel</key>
+			<string>Scroll to page 1 by default</string>
+			<key>defaults</key>
+			<string>com.azzou.coeusprefs</string>
 		</dict>
 
 		<dict>

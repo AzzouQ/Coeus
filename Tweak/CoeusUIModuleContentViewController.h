@@ -25,14 +25,15 @@
 @property (nonatomic, assign) NSInteger togglePage;
 @property (nonatomic, assign) CGFloat spaceWidth;
 @property (nonatomic, assign) CGFloat spaceHeight;
+@property (nonatomic, assign) NSInteger scrollTo;
 
-- (void)initPreferences;
-- (void)initScrollView;
-- (void)intiToggles;
+- (void)createPreferences;
+- (void)createScrollView;
+- (void)createToggles;
 
 - (void)setExpandedContentSize;
 
-- (void)initLayout;
+- (void)prepareLayout;
 
 - (void)setLayout;
 - (void)setScrollView;

@@ -17,6 +17,7 @@ static NSInteger	columnCollapsed;
 static BOOL			isIndicatorCollapsed;
 static BOOL			isPagingCollapsed;
 static BOOL			isLabelsCollapsed;
+static NSInteger    scrollToCollapsed;
 
 static NSInteger	rowExpanded;
 static NSInteger	columnExpanded;
@@ -24,3 +25,4 @@ static BOOL			isIndicatorExpanded;
 static BOOL			isPagingExpanded;
 static BOOL			isLabelsExpanded;
 static BOOL			isScrollVertical;
+static NSInteger    scrollToExpanded;
