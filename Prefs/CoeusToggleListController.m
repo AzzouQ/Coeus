@@ -2,6 +2,7 @@
 
 @implementation CoeusToggleListController
 
+// Get the specifiers that aren't built manually from the plist
 - (id)specifiers {
 
 	if (_specifiers == nil) {
@@ -11,6 +12,7 @@
 	return _specifiers;
 }
 
+// You know those already
 - (void)viewWillAppear:(BOOL)animated {
 
 	[super viewWillAppear:animated];
@@ -18,6 +20,7 @@
 	[self reload];
 }
 
+// You know those already
 - (void)viewDidLoad {
 
 	[super viewDidLoad];
@@ -26,6 +29,7 @@
 	[self reload];
 }
 
+// Get the specifiers that are already created and saved in the prefs
 - (void)loadSpecifierFromToggleList {
 
 	NSArray *toggleList = [prefs objectForKey:@"toggleList"];
@@ -37,6 +41,7 @@
 	[self insertContiguousSpecifiers:specifierList atEndOfGroup:1];
 }
 
+// Create a specifier and get it ready to be added to our list
 - (PSSpecifier *)createToggleSpecifier:(NSString *)name {
 
 	PSSpecifier *specifier = [PSSpecifier preferenceSpecifierNamed:name target:self set:NULL get:NULL detail:NSClassFromString(@"CoeusToggleController") cell:PSLinkCell edit:Nil];
@@ -47,6 +52,7 @@
 	return specifier;
 }
 
+// Display the alert used to set a name to the Specifier (You don't need that)
 - (void)addToggleAlert {
 
 	UIAlertController *addToggleAlert = [UIAlertController alertControllerWithTitle:@"Add Toggle" message:@"Choose a name for your toggle" preferredStyle:UIAlertControllerStyleAlert];	
@@ -62,6 +68,7 @@
 	[self presentViewController:addToggleAlert animated:YES completion:nil];
 }
 
+// Remove the specifier from our prefs
 - (void)removeToggle:(PSSpecifier *)specifier {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
@@ -71,19 +78,24 @@
 	[prefs setObject:toggleList forKey:@"toggleList"];
 }
 
+// Add new specifier
 - (void)saveToggle:(PSSpecifier *)specifier {
 
+	// Look if prefs contains specifier already, if not, init the list
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
 	if (!(toggleList)) {
 		toggleList = [[NSMutableArray alloc] init];
 	}
 
+	// Add new specifier to the prefs
 	[toggleList addObject:[self createToggleWithSpecifier:specifier]];
 	[prefs setObject:toggleList forKey:@"toggleList"];
 
+	// Add new specifier to the Controller
 	[self insertSpecifier:specifier atEndOfGroup:1];
 }
 
+// Init the toggle on preferences, you don't need that
 - (NSMutableDictionary *)createToggleWithSpecifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *toggle = [[NSMutableDictionary alloc] init];
@@ -102,6 +114,8 @@
 	return toggle;
 }
 
+
+// Coeus only, activator related, you don't need that
 - (NSString *)getEventIdentifier {
 
 	NSMutableArray *toggleList = [prefs objectForKey:@"toggleList"];
@@ -118,6 +132,7 @@
 	return [NSString stringWithFormat:@"com.azzou.coeus.toggle%ld", newID + 1];
 }
 
+// Coeus only, used to make the toggle clickable, you don't need that
 - (void)setToggleController:(PSSpecifier *)specifier {
 
 	CoeusToggleController *toggleController = [[CoeusToggleController alloc] initWithSpecifier:specifier toggleIndex:[self indexPathForSpecifier:specifier].row];
@@ -125,6 +140,7 @@
 	[self.navigationController pushViewController:toggleController animated:YES];
 }
 
+// Rearrange the list, you don't need that
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)atIndex toIndexPath:(NSIndexPath *)toIndex {
 
 	NSMutableArray *toggleList = [[prefs objectForKey:@"toggleList"] mutableCopy];
@@ -140,6 +156,7 @@
 	[tableView reloadData];
 }
 
+// Modify the icon on the right of the list, you don't need that
 - (void)editDoneTapped {
 
 	NSArray *specifierList = [self specifiersInGroup:1];
@@ -151,10 +168,12 @@
 	}
 }
 
+// Rearrange the list, you don't need that
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)atIndex {
 	return YES;
 }
 
+// No idea of what it that
 - (BOOL)shouldReloadSpecifiersOnResume {
 	return NO;
 }
